@@ -1,6 +1,6 @@
 {
   "name": "devonthink-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pure CLI wrapper for the DEVONthink scripting dictionary.",
   "type": "module",
   "bin": {

@@ -2,10 +2,10 @@
 
 Pure CLI wrapper for the DEVONthink scripting dictionary.
 
-`devonthink-cli` does not add a workflow layer on top of DEVONthink. It exposes DEVONthink's own scripting model through a shell-friendly command surface:
+`devonthink-cli` does not add a workflow layer on top of DEVONthink. It exposes DEVONthink's own scripting model through a shell-friendly, task-oriented command surface:
 
-- dictionary-mirroring commands such as `search`, `import-path`, `move`, `classify`
-- generic property access for `application`, `database`, `group`, and `record`
+- intuitive top-level verbs (`add`, `delete`, `move`, `list`, `search`)
+- colon-namespaced grouping (`property:get`, `lookup:tags`, `ai:classify`)
 - JSON output by default
 
 Repository-local maintainer docs:
@@ -41,170 +41,173 @@ pnpm link --global
 List open databases:
 
 ```bash
-dt database list
+dt list
 ```
 
 Inspect DEVONthink's global Inbox model:
 
 ```bash
-dt application get --property "inbox" --property "incoming group"
+dt property:get inbox "incoming group"
 ```
 
 List child groups under a location:
 
 ```bash
-dt group list --database "01. Personal" --at "/Projects"
+dt list --db "01. Personal" /Projects
 ```
 
 Read selected properties from a record:
 
 ```bash
-dt record get \
-  --database "01. Personal" \
-  --at "/Projects/Existing.pdf" \
-  --property name \
-  --property tags \
-  --property comment
+dt property:get --uuid "<record-uuid>" name tags comment
 ```
 
 Set writable record properties:
 
 ```bash
-dt record set \
-  --uuid "<record-uuid>" \
-  --set "comment=Reviewed" \
-  --set "tags=project,reading"
+dt property:set --uuid "<record-uuid>" comment=Reviewed tags=project,reading
 ```
 
 Run native DEVONthink search:
 
 ```bash
-dt search "tags:reference" --in-database "01. Personal"
+dt search "tags:reference" --db "01. Personal"
 ```
 
-Import a local file exactly as DEVONthink does:
+Import a local file:
 
 ```bash
-dt import-path ~/Downloads/paper.pdf \
-  --to-database "01. Personal" \
-  --to-at "/Projects"
+dt add ~/Downloads/paper.pdf --db "01. Personal" --at "/Projects"
 ```
 
 Move a record to another group:
 
 ```bash
-dt move \
-  --record-uuid "<record-uuid>" \
-  --to-database "01. Personal" \
-  --to-at "/Projects/Archive"
+dt move --uuid "<record-uuid>" --to-db "01. Personal" --to "/Projects/Archive"
 ```
 
 ## CLI Model
 
-This package keeps only one CLI-specific layer: object locators.
+Locators determine which entity you are addressing:
 
-- Databases:
-  - `--name <name>`
-  - `--uuid <uuid>`
-  - command parameters often use `--<param>-database <name|uuid>`
-- Groups:
-  - `--database <name|uuid> --at <path>`
-  - command parameters often use `--<param>-database <name|uuid> --<param>-at <path>`
-- Records:
-  - `--uuid <uuid>`
-  - or `--database <name|uuid> --at <path>`
-  - command parameters often use `--record-uuid <uuid>` or `--record-database ... --record-at ...`
+- `--uuid <uuid>` — record (by UUID or item link)
+- `--db <name|uuid> --at <path>` — group or record at a specific location
+- `--db <name|uuid>` — database itself
+- _(no locator)_ — application
 
-DEVONthink paths are the same location syntax described in the scripting dictionary:
+Destination/source containers use prefixed options:
+
+- `--to-db <name|uuid> --to <path>` — destination group
+- `--from-db <name|uuid> --from <path>` — source group
+
+DEVONthink paths use the same location syntax as the scripting dictionary:
 
 - root-based: `"/Projects/Inbox"`
 - literal `/` in names must be escaped as `\/`
 
 ## Command Surface
 
-Object/property commands:
+### Core
 
-- `dt application get`
-- `dt database list`
-- `dt database get`
-- `dt database set`
-- `dt group list`
-- `dt group get`
-- `dt group set`
-- `dt record get`
-- `dt record set`
+| Command | Description |
+|---|---|
+| `dt add <path>` | Import a file or folder |
+| `dt delete --uuid X` | Delete a record |
+| `dt move --uuid X --to-db X --to /Y` | Move a record |
+| `dt list [--db X] [/path]` | List databases or groups |
+| `dt search "query" [--db X]` | Search for records |
 
-Dictionary-mirroring commands:
+### Property
 
-- `dt search`
-- `dt import-path`
-- `dt index-path`
-- `dt create-location`
-- `dt create-record-with`
-- `dt get-record-at`
-- `dt get-record-with-uuid`
-- `dt lookup-records-with-file`
-- `dt lookup-records-with-path`
-- `dt lookup-records-with-tags`
-- `dt lookup-records-with-url`
-- `dt move`
-- `dt delete`
-- `dt duplicate`
-- `dt replicate`
-- `dt compare`
-- `dt classify`
+| Command | Description |
+|---|---|
+| `dt property:get [locator] <prop> ...` | Read properties from any entity |
+| `dt property:set [locator] key=val ...` | Write properties on any entity |
 
-Use `dt --help` or `dt <command> --help` to see the current flag grammar generated from the checked-in DEVONthink schema artifact.
+### Create
+
+| Command | Description |
+|---|---|
+| `dt create:location /path --db X` | Create a hierarchy of groups |
+| `dt create:record '{"name":"X"}' --db X --at /Y` | Create a new record |
+
+### Lookup
+
+| Command | Description |
+|---|---|
+| `dt lookup:file "name" --db X` | Find records by filename |
+| `dt lookup:tags tag1 tag2 [--any] --db X` | Find records by tags |
+| `dt lookup:url "https://..." --db X` | Find records by URL |
+| `dt lookup:path "/path" --db X` | Find records by file path |
+
+### AI
+
+| Command | Description |
+|---|---|
+| `dt ai:classify --uuid X [--db X]` | Classify a record |
+| `dt ai:compare --uuid X` | Find similar records |
+
+### Record
+
+| Command | Description |
+|---|---|
+| `dt record:get --uuid X` | Get a record by UUID |
+| `dt record:get --db X --at /path` | Get a record by location |
+| `dt record:duplicate --uuid X --to-db X --to /Y` | Duplicate a record |
+| `dt record:replicate --uuid X --to-db X --to /Y` | Replicate a record |
+
+### Other
+
+| Command | Description |
+|---|---|
+| `dt index <path> --db X` | Index without copying |
+
+Use `dt --help` or `dt <command> --help` for detailed usage.
 
 ## Examples
 
 List only selected database properties:
 
 ```bash
-dt database get \
-  --name "01. Personal" \
-  --property path \
-  --property root \
-  --property "incoming group"
+dt property:get --db "01. Personal" path root "incoming group"
 ```
 
 Create a location hierarchy:
 
 ```bash
-dt create-location "/Projects/2026/Papers" --in-database "01. Personal"
+dt create:location "/Projects/2026/Papers" --db "01. Personal"
 ```
 
-Create a new note-like record from a property dictionary:
+Create a new record from a property dictionary:
 
 ```bash
-dt create-record-with \
+dt create:record \
   '{"name":"Scratch","type":"markdown","tags":["draft"]}' \
-  --in-database "01. Personal" \
-  --in-at "/Projects"
+  --db "01. Personal" --at "/Projects"
 ```
 
 Lookup by filename:
 
 ```bash
-dt lookup-records-with-file "paper.pdf" --in-database "01. Personal"
+dt lookup:file "paper.pdf" --db "01. Personal"
 ```
 
 Lookup by tags:
 
 ```bash
-dt lookup-records-with-tags reading llm --any --in-database "01. Personal"
+dt lookup:tags reading llm --any --db "01. Personal"
 ```
 
 Compare similar records:
 
 ```bash
-dt compare --record-uuid "<record-uuid>"
+dt ai:compare --uuid "<record-uuid>"
 ```
 
 Classify a record:
 
 ```bash
-dt classify --record-uuid "<record-uuid>" --in-database "01. Personal"
+dt ai:classify --uuid "<record-uuid>" --db "01. Personal"
 ```
 
 ## Philosophy

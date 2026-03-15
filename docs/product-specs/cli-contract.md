@@ -12,32 +12,45 @@
 
 ## Public Command Families
 
-### Object/property commands
+### Core commands (top-level, daily use)
 
-- `application get`
-- `database list|get|set`
-- `group list|get|set`
-- `record get|set`
+- `add` — import files/folders
+- `delete` — delete records
+- `move` — move records between groups
+- `list` — list databases or groups
+- `search` — search for records
 
-### Dictionary-mirroring commands
+### Property commands
 
-- `search`
-- `import-path`
-- `index-path`
-- `create-location`
-- `create-record-with`
-- `get-record-at`
-- `get-record-with-uuid`
-- `lookup-records-with-file`
-- `lookup-records-with-path`
-- `lookup-records-with-tags`
-- `lookup-records-with-url`
-- `move`
-- `delete`
-- `duplicate`
-- `replicate`
-- `compare`
-- `classify`
+- `property:get` — read properties from any entity (application, database, group, record)
+- `property:set` — write properties on any entity (database, group, record)
+
+### Create commands
+
+- `create:location` — create group hierarchies
+- `create:record` — create records from property dictionaries
+
+### Lookup commands
+
+- `lookup:file` — find records by filename
+- `lookup:tags` — find records by tags
+- `lookup:url` — find records by URL
+- `lookup:path` — find records by file path
+
+### AI commands
+
+- `ai:classify` — classify records into suggested groups
+- `ai:compare` — find similar records
+
+### Record commands
+
+- `record:get` — get record by UUID or path
+- `record:duplicate` — duplicate a record
+- `record:replicate` — replicate a record
+
+### Other
+
+- `index` — index files without copying
 
 ## Non-Goals
 

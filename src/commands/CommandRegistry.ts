@@ -1,6 +1,8 @@
 import { ValidationError } from "../application/errors.js";
 import type { CommandContext, CommandModule } from "./types.js";
 
+const CATEGORY_ORDER = ["Core", "Property", "Create", "Lookup", "AI", "Record", "Other"];
+
 export class CommandRegistry {
   private readonly commands = new Map<string, CommandModule>();
 
@@ -9,15 +11,29 @@ export class CommandRegistry {
   }
 
   help(): string {
-    const lines = ["Usage: dt <command> [options]", "", "Commands:"];
+    const lines = ["Usage: dt <command> [options]", ""];
 
-    for (const command of [...this.commands.values()].sort((a, b) =>
-      a.name.localeCompare(b.name)
-    )) {
-      lines.push(`  ${command.name.padEnd(24)} ${command.description}`);
+    const byCategory = new Map<string, CommandModule[]>();
+    for (const command of this.commands.values()) {
+      const list = byCategory.get(command.category) ?? [];
+      list.push(command);
+      byCategory.set(command.category, list);
     }
 
-    return lines.join("\n");
+    for (const category of CATEGORY_ORDER) {
+      const commands = byCategory.get(category);
+      if (!commands || commands.length === 0) {
+        continue;
+      }
+
+      lines.push(`${category}:`);
+      for (const command of commands.sort((a, b) => a.name.localeCompare(b.name))) {
+        lines.push(`  ${command.name.padEnd(24)} ${command.description}`);
+      }
+      lines.push("");
+    }
+
+    return lines.join("\n").trimEnd();
   }
 
   async run(argv: string[], context: CommandContext): Promise<void> {

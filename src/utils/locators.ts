@@ -14,6 +14,78 @@ import {
   type ParsedArgs
 } from "./args.js";
 
+export function buildGroupRef(
+  parsed: ParsedArgs,
+  dbOption: string,
+  atOption: string,
+  options?: { required?: boolean }
+): GroupReference | undefined {
+  const db = getOption(parsed, dbOption);
+  const at = getOption(parsed, atOption);
+
+  if (!db && !at) {
+    if (options?.required) {
+      throw new ValidationError(`Missing required option: --${dbOption}.`);
+    }
+    return undefined;
+  }
+
+  if (!db) {
+    throw new ValidationError(`Missing required option: --${dbOption}.`);
+  }
+
+  return {
+    $type: "group",
+    locator: { database: { identifier: db }, at }
+  };
+}
+
+export function buildContainerRef(
+  parsed: ParsedArgs,
+  dbOption: string,
+  atOption?: string,
+  options?: { required?: boolean }
+): ContainerReference | undefined {
+  const db = getOption(parsed, dbOption);
+  const at = atOption ? getOption(parsed, atOption) : undefined;
+
+  if (!db && !at) {
+    if (options?.required) {
+      throw new ValidationError(`Missing required option: --${dbOption}.`);
+    }
+    return undefined;
+  }
+
+  if (!db) {
+    throw new ValidationError(`Missing required option: --${dbOption}.`);
+  }
+
+  return {
+    $type: "container",
+    locator: { database: { identifier: db }, at }
+  };
+}
+
+export function buildRecordRef(
+  parsed: ParsedArgs,
+  uuidOption: string,
+  options?: { required?: boolean }
+): RecordReference | undefined {
+  const uuid = getOption(parsed, uuidOption);
+
+  if (!uuid) {
+    if (options?.required) {
+      throw new ValidationError(`Missing required option: --${uuidOption}.`);
+    }
+    return undefined;
+  }
+
+  return {
+    $type: "record",
+    locator: { uuid }
+  };
+}
+
 export function databaseSelectorFromNameOrUuid(
   parsed: ParsedArgs,
   label = "database"

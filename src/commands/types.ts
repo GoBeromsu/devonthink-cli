@@ -9,6 +9,7 @@ export interface CommandContext {
 
 export interface CommandModule<TInput = unknown> {
   name: string;
+  category: string;
   description: string;
   help(context?: CommandContext): string;
   parse(argv: string[], context?: CommandContext): TInput;

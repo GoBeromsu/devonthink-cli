@@ -6,7 +6,7 @@ describe("lookup and search executable spec", () => {
     const result = await runCli([
       "search",
       "tags:llm",
-      "--in-database",
+      "--db",
       "01. Personal",
       "--exclude-subgroups",
       "--comparison",
@@ -37,9 +37,9 @@ describe("lookup and search executable spec", () => {
     });
 
     const byFile = await runCli([
-      "lookup-records-with-file",
+      "lookup:file",
       "Existing.pdf",
-      "--in-database",
+      "--db",
       "01. Personal"
     ], result.port);
     expect(byFile.code).toBe(0);
@@ -48,11 +48,11 @@ describe("lookup and search executable spec", () => {
     ]);
 
     const byTags = await runCli([
-      "lookup-records-with-tags",
+      "lookup:tags",
       "llm",
       "reference",
       "--any",
-      "--in-database",
+      "--db",
       "01. Personal"
     ], result.port);
     expect(byTags.code).toBe(0);

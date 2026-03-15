@@ -19,27 +19,29 @@ The CLI is intentionally thin:
 
 ## Public Model
 
-The public surface has two layers only:
+The public surface uses task-oriented verbs with colon-namespaced grouping:
 
-1. Native DEVONthink dictionary commands
-2. Object locators for shell ergonomics
+- Core: `add`, `delete`, `move`, `list`, `search`
+- Property: `property:get`, `property:set`
+- Create: `create:location`, `create:record`
+- Lookup: `lookup:file`, `lookup:tags`, `lookup:url`, `lookup:path`
+- AI: `ai:classify`, `ai:compare`
+- Record: `record:get`, `record:duplicate`, `record:replicate`
+- Other: `index`
 
-Examples:
+Locators are simplified:
 
-- `dt search`
-- `dt import-path`
-- `dt move`
-- `dt application get`
-- `dt database get`
-- `dt group set`
-- `dt record get`
+- `--uuid` for records
+- `--db` / `--at` for database/group targeting
+- `--to-db` / `--to` for destination
+- `--from-db` / `--from` for source
 
 ## Boundaries
 
 ### Allowed
 
-- schema-driven command metadata
-- generic property get/set
+- hand-coded command classes per verb
+- generic property get/set across entity types
 - JSON serialization of native DEVONthink objects
 - fake DEVONthink harnesses for deterministic CLI specs
 

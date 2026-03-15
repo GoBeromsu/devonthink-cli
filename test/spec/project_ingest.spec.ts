@@ -3,7 +3,7 @@ import { parseJsonOutput, runCli } from "./helpers.js";
 
 describe("project ingest executable spec", () => {
   it("lists databases, inspects groups, imports a file, updates record properties, and verifies the result", async () => {
-    const dbList = await runCli(["database", "list"]);
+    const dbList = await runCli(["list"]);
     expect(dbList.code).toBe(0);
     expect(parseJsonOutput(dbList.stdout)).toEqual(
       expect.arrayContaining([
@@ -13,11 +13,9 @@ describe("project ingest executable spec", () => {
     );
 
     const groupList = await runCli([
-      "group",
       "list",
-      "--database",
+      "--db",
       "01. Personal",
-      "--at",
       "/Projects"
     ], dbList.port);
     expect(groupList.code).toBe(0);
@@ -29,11 +27,11 @@ describe("project ingest executable spec", () => {
     );
 
     const imported = await runCli([
-      "import-path",
+      "add",
       "/Users/beomsu/Downloads/NewPaper.pdf",
-      "--to-database",
+      "--db",
       "01. Personal",
-      "--to-at",
+      "--at",
       "/Projects"
     ], dbList.port);
     expect(imported.code).toBe(0);
@@ -42,15 +40,11 @@ describe("project ingest executable spec", () => {
     expect(importedRecord.path).toBe("/Users/beomsu/Downloads/NewPaper.pdf");
 
     const updated = await runCli([
-      "record",
-      "set",
+      "property:set",
       "--uuid",
       String(importedRecord.uuid),
-      "--set",
       "name=Project Paper",
-      "--set",
       "tags=project,reading",
-      "--set",
       "comment=Imported from Downloads"
     ], dbList.port);
     expect(updated.code).toBe(0);
@@ -63,10 +57,11 @@ describe("project ingest executable spec", () => {
     );
 
     const fetched = await runCli([
-      "get-record-at",
-      "/Projects/Project Paper",
-      "--in-database",
-      "01. Personal"
+      "record:get",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects/Project Paper"
     ], dbList.port);
     expect(fetched.code).toBe(0);
     expect(parseJsonOutput(fetched.stdout)).toEqual(

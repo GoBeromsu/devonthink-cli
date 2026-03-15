@@ -15,35 +15,35 @@ npm install -g devonthink-cli
 2. Confirm DEVONthink is running and open:
 
 ```bash
-dt database list
+dt list
 ```
 
 3. Inspect the global Inbox:
 
 ```bash
-dt application get --property inbox --property "incoming group"
+dt property:get inbox "incoming group"
 ```
 
 4. Explore a database:
 
 ```bash
-dt group list --database "01. Personal" --at "/"
+dt list --db "01. Personal"
 ```
 
 5. Inspect a record:
 
 ```bash
-dt record get --database "01. Personal" --at "/Some Folder/Some Record"
+dt property:get --uuid "<record-uuid>" name tags comment
 ```
 
 6. Run a native search:
 
 ```bash
-dt search "name:paper" --in-database "01. Personal"
+dt search "name:paper" --db "01. Personal"
 ```
 
 7. Import a file:
 
 ```bash
-dt import-path ~/Downloads/paper.pdf --to-database "01. Personal" --to-at "/Inbox"
+dt add ~/Downloads/paper.pdf --db "01. Personal" --at "/Inbox"
 ```

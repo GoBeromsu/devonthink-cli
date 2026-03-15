@@ -1,9 +1,4 @@
-import { ApplicationCommand } from "../../src/commands/applicationCommand.js";
 import { CommandRegistry } from "../../src/commands/CommandRegistry.js";
-import { DatabaseCommand } from "../../src/commands/databaseCommand.js";
-import { DirectCommand } from "../../src/commands/directCommand.js";
-import { GroupCommand } from "../../src/commands/groupCommand.js";
-import { RecordCommand } from "../../src/commands/recordCommand.js";
 import { devonthinkSchema } from "../../src/schema/index.js";
 import {
   toErrorMessage,
@@ -29,6 +24,25 @@ import type {
   RecordGetInput,
   RecordSetInput
 } from "../../src/application/ports.js";
+import { AddCommand } from "../../src/commands/addCommand.js";
+import { DeleteCommand } from "../../src/commands/deleteCommand.js";
+import { MoveCommand } from "../../src/commands/moveCommand.js";
+import { ListCommand } from "../../src/commands/listCommand.js";
+import { SearchCommand } from "../../src/commands/searchCommand.js";
+import { IndexCommand } from "../../src/commands/indexCommand.js";
+import { PropertyGetCommand } from "../../src/commands/propertyGetCommand.js";
+import { PropertySetCommand } from "../../src/commands/propertySetCommand.js";
+import { CreateLocationCommand } from "../../src/commands/createLocationCommand.js";
+import { CreateRecordCommand } from "../../src/commands/createRecordCommand.js";
+import { LookupFileCommand } from "../../src/commands/lookupFileCommand.js";
+import { LookupTagsCommand } from "../../src/commands/lookupTagsCommand.js";
+import { LookupUrlCommand } from "../../src/commands/lookupUrlCommand.js";
+import { LookupPathCommand } from "../../src/commands/lookupPathCommand.js";
+import { AiClassifyCommand } from "../../src/commands/aiClassifyCommand.js";
+import { AiCompareCommand } from "../../src/commands/aiCompareCommand.js";
+import { RecordGetCommand } from "../../src/commands/recordGetCommand.js";
+import { RecordDuplicateCommand } from "../../src/commands/recordDuplicateCommand.js";
+import { RecordReplicateCommand } from "../../src/commands/recordReplicateCommand.js";
 
 interface DatabaseEntity {
   id: string;
@@ -815,13 +829,25 @@ export async function runCli(argv: string[], port = new FakeDevonthinkPort()) {
   const output = new BufferOutput();
   const registry = new CommandRegistry();
 
-  registry.register(new ApplicationCommand());
-  registry.register(new DatabaseCommand());
-  registry.register(new GroupCommand());
-  registry.register(new RecordCommand());
-  for (const command of Object.values(devonthinkSchema.commands)) {
-    registry.register(new DirectCommand(command));
-  }
+  registry.register(new AddCommand());
+  registry.register(new DeleteCommand());
+  registry.register(new MoveCommand());
+  registry.register(new ListCommand());
+  registry.register(new SearchCommand());
+  registry.register(new IndexCommand());
+  registry.register(new PropertyGetCommand());
+  registry.register(new PropertySetCommand());
+  registry.register(new CreateLocationCommand());
+  registry.register(new CreateRecordCommand());
+  registry.register(new LookupFileCommand());
+  registry.register(new LookupTagsCommand());
+  registry.register(new LookupUrlCommand());
+  registry.register(new LookupPathCommand());
+  registry.register(new AiClassifyCommand());
+  registry.register(new AiCompareCommand());
+  registry.register(new RecordGetCommand());
+  registry.register(new RecordDuplicateCommand());
+  registry.register(new RecordReplicateCommand());
 
   try {
     await registry.run(argv, {
