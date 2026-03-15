@@ -5,14 +5,14 @@ import { buildContainerRef } from "../utils/locators.js";
 import { renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
 
-export class CreateLocationCommand implements CommandModule<DevonthinkCommandInput> {
-  readonly name = "create:location";
+export class CreateGroupCommand implements CommandModule<DevonthinkCommandInput> {
+  readonly name = "create:group";
   readonly category = "Create";
   readonly description = "Create a hierarchy of groups.";
 
   help(): string {
     return [
-      "Usage: dt create:location <path> [--db <name|uuid>]",
+      "Usage: dt create:group <path> [--db <name|uuid>]",
       "",
       "Create a hierarchy of groups if necessary.",
       "",
@@ -20,7 +20,7 @@ export class CreateLocationCommand implements CommandModule<DevonthinkCommandInp
       "  --db <name|uuid>   Destination database",
       "",
       "Examples:",
-      '  dt create:location "/Projects/2026/Papers" --db "01. Personal"'
+      '  dt create:group "/Projects/2026/Papers" --db "01. Personal"'
     ].join("\n");
   }
 
@@ -33,7 +33,7 @@ export class CreateLocationCommand implements CommandModule<DevonthinkCommandInp
       throw new ValidationError("Missing required location path.");
     }
     if (parsed.positionals.length > 1) {
-      throw new ValidationError("create:location accepts only one path.");
+      throw new ValidationError("create:group accepts only one path.");
     }
 
     const inRef = buildContainerRef(parsed, "db");

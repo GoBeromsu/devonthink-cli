@@ -1,7 +1,7 @@
 import { ValidationError } from "../application/errors.js";
 import type { CommandContext, CommandModule } from "./types.js";
 
-const CATEGORY_ORDER = ["Core", "Property", "Create", "Lookup", "AI", "Record", "Other"];
+const CATEGORY_ORDER = ["Core", "Property", "Create", "Lookup", "AI", "Other"];
 
 export class CommandRegistry {
   private readonly commands = new Map<string, CommandModule>();

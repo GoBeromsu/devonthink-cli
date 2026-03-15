@@ -6,15 +6,15 @@ import { ensureNoPositionals, renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
 
 export class RecordGetCommand implements CommandModule<DevonthinkCommandInput> {
-  readonly name = "record:get";
-  readonly category = "Record";
+  readonly name = "get";
+  readonly category = "Core";
   readonly description = "Get a record by UUID or path.";
 
   help(): string {
     return [
       "Usage:",
-      "  dt record:get --uuid <uuid>",
-      "  dt record:get --db <name|uuid> --at <path>",
+      "  dt get --uuid <uuid>",
+      "  dt get --db <name|uuid> --at <path>",
       "",
       "Retrieve a record object by UUID or by its location in a database.",
       "",
@@ -24,15 +24,15 @@ export class RecordGetCommand implements CommandModule<DevonthinkCommandInput> {
       "  --at <path>          Record location path",
       "",
       "Examples:",
-      '  dt record:get --uuid "ABC-123"',
-      '  dt record:get --db "01. Personal" --at "/Projects/Report.pdf"'
+      '  dt get --uuid "ABC-123"',
+      '  dt get --db "01. Personal" --at "/Projects/Report.pdf"'
     ].join("\n");
   }
 
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "db", "at"]);
-    ensureNoPositionals(parsed, "record:get");
+    ensureNoPositionals(parsed, "get");
 
     const uuid = getOption(parsed, "uuid");
     const db = getOption(parsed, "db");
@@ -58,10 +58,10 @@ export class RecordGetCommand implements CommandModule<DevonthinkCommandInput> {
     }
 
     if (db) {
-      throw new ValidationError("record:get with --db requires --at.");
+      throw new ValidationError("get with --db requires --at.");
     }
 
-    throw new ValidationError("record:get requires --uuid or --db with --at.");
+    throw new ValidationError("get requires --uuid or --db with --at.");
   }
 
   async execute(input: DevonthinkCommandInput, context: CommandContext): Promise<void> {

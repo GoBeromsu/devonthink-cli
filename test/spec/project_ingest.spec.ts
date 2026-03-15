@@ -3,7 +3,7 @@ import { parseJsonOutput, runCli } from "./helpers.js";
 
 describe("project ingest executable spec", () => {
   it("lists databases, inspects groups, imports a file, updates record properties, and verifies the result", async () => {
-    const dbList = await runCli(["list"]);
+    const dbList = await runCli(["databases"]);
     expect(dbList.code).toBe(0);
     expect(parseJsonOutput(dbList.stdout)).toEqual(
       expect.arrayContaining([
@@ -13,7 +13,7 @@ describe("project ingest executable spec", () => {
     );
 
     const groupList = await runCli([
-      "list",
+      "groups",
       "--db",
       "01. Personal",
       "/Projects"
@@ -57,7 +57,7 @@ describe("project ingest executable spec", () => {
     );
 
     const fetched = await runCli([
-      "record:get",
+      "get",
       "--db",
       "01. Personal",
       "--at",

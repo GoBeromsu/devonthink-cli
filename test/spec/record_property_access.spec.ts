@@ -4,7 +4,7 @@ import { parseJsonOutput, runCli } from "./helpers.js";
 describe("record property access executable spec", () => {
   it("gets requested record properties and updates only official writable properties", async () => {
     const initial = await runCli([
-      "property:get",
+      "property:read",
       "--uuid",
       "record-existing-1",
       "name",

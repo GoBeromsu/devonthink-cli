@@ -4,8 +4,9 @@ Pure CLI wrapper for the DEVONthink scripting dictionary.
 
 `devonthink-cli` does not add a workflow layer on top of DEVONthink. It exposes DEVONthink's own scripting model through a shell-friendly, task-oriented command surface:
 
-- intuitive top-level verbs (`add`, `delete`, `move`, `list`, `search`)
-- colon-namespaced grouping (`property:get`, `lookup:tags`, `ai:classify`)
+- intuitive top-level verbs (`add`, `delete`, `move`, `get`, `search`)
+- noun plurals for listing (`databases`, `groups`)
+- colon-namespaced grouping (`property:read`, `lookup:tags`, `ai:classify`)
 - JSON output by default
 
 Repository-local maintainer docs:
@@ -41,25 +42,25 @@ pnpm link --global
 List open databases:
 
 ```bash
-dt list
+dt databases
 ```
 
 Inspect DEVONthink's global Inbox model:
 
 ```bash
-dt property:get inbox "incoming group"
+dt property:read inbox "incoming group"
 ```
 
 List child groups under a location:
 
 ```bash
-dt list --db "01. Personal" /Projects
+dt groups --db "01. Personal" /Projects
 ```
 
 Read selected properties from a record:
 
 ```bash
-dt property:get --uuid "<record-uuid>" name tags comment
+dt property:read --uuid "<record-uuid>" name tags comment
 ```
 
 Set writable record properties:
@@ -112,23 +113,27 @@ DEVONthink paths use the same location syntax as the scripting dictionary:
 | Command | Description |
 |---|---|
 | `dt add <path>` | Import a file or folder |
+| `dt databases` | List open databases |
 | `dt delete --uuid X` | Delete a record |
+| `dt duplicate --uuid X --to-db X --to /Y` | Duplicate a record |
+| `dt get --uuid X` | Get a record by UUID or path |
+| `dt groups --db X [/path]` | List child groups in a database |
 | `dt move --uuid X --to-db X --to /Y` | Move a record |
-| `dt list [--db X] [/path]` | List databases or groups |
+| `dt replicate --uuid X --to-db X --to /Y` | Replicate a record |
 | `dt search "query" [--db X]` | Search for records |
 
 ### Property
 
 | Command | Description |
 |---|---|
-| `dt property:get [locator] <prop> ...` | Read properties from any entity |
+| `dt property:read [locator] <prop> ...` | Read properties from any entity |
 | `dt property:set [locator] key=val ...` | Write properties on any entity |
 
 ### Create
 
 | Command | Description |
 |---|---|
-| `dt create:location /path --db X` | Create a hierarchy of groups |
+| `dt create:group /path --db X` | Create a hierarchy of groups |
 | `dt create:record '{"name":"X"}' --db X --at /Y` | Create a new record |
 
 ### Lookup
@@ -147,15 +152,6 @@ DEVONthink paths use the same location syntax as the scripting dictionary:
 | `dt ai:classify --uuid X [--db X]` | Classify a record |
 | `dt ai:compare --uuid X` | Find similar records |
 
-### Record
-
-| Command | Description |
-|---|---|
-| `dt record:get --uuid X` | Get a record by UUID |
-| `dt record:get --db X --at /path` | Get a record by location |
-| `dt record:duplicate --uuid X --to-db X --to /Y` | Duplicate a record |
-| `dt record:replicate --uuid X --to-db X --to /Y` | Replicate a record |
-
 ### Other
 
 | Command | Description |
@@ -169,13 +165,13 @@ Use `dt --help` or `dt <command> --help` for detailed usage.
 List only selected database properties:
 
 ```bash
-dt property:get --db "01. Personal" path root "incoming group"
+dt property:read --db "01. Personal" path root "incoming group"
 ```
 
-Create a location hierarchy:
+Create a group hierarchy:
 
 ```bash
-dt create:location "/Projects/2026/Papers" --db "01. Personal"
+dt create:group "/Projects/2026/Papers" --db "01. Personal"
 ```
 
 Create a new record from a property dictionary:

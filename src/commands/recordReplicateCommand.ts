@@ -5,13 +5,13 @@ import { ensureNoPositionals, renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
 
 export class RecordReplicateCommand implements CommandModule<DevonthinkCommandInput> {
-  readonly name = "record:replicate";
-  readonly category = "Record";
+  readonly name = "replicate";
+  readonly category = "Core";
   readonly description = "Replicate a record to another group.";
 
   help(): string {
     return [
-      "Usage: dt record:replicate --uuid <uuid> --to-db <name|uuid> --to <path>",
+      "Usage: dt replicate --uuid <uuid> --to-db <name|uuid> --to <path>",
       "",
       "Replicate a record to a destination group (must be in the same database).",
       "",
@@ -21,14 +21,14 @@ export class RecordReplicateCommand implements CommandModule<DevonthinkCommandIn
       "  --to <path>           Destination group path",
       "",
       "Examples:",
-      '  dt record:replicate --uuid "ABC-123" --to-db "01. Personal" --to "/Projects/Archive"'
+      '  dt replicate --uuid "ABC-123" --to-db "01. Personal" --to "/Projects/Archive"'
     ].join("\n");
   }
 
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "to-db", "to"]);
-    ensureNoPositionals(parsed, "record:replicate");
+    ensureNoPositionals(parsed, "replicate");
 
     const record = buildRecordRef(parsed, "uuid", { required: true })!;
     const to = buildGroupRef(parsed, "to-db", "to", { required: true })!;

@@ -15,25 +15,25 @@ npm install -g devonthink-cli
 2. Confirm DEVONthink is running and open:
 
 ```bash
-dt list
+dt databases
 ```
 
 3. Inspect the global Inbox:
 
 ```bash
-dt property:get inbox "incoming group"
+dt property:read inbox "incoming group"
 ```
 
 4. Explore a database:
 
 ```bash
-dt list --db "01. Personal"
+dt groups --db "01. Personal"
 ```
 
 5. Inspect a record:
 
 ```bash
-dt property:get --uuid "<record-uuid>" name tags comment
+dt property:read --uuid "<record-uuid>" name tags comment
 ```
 
 6. Run a native search:

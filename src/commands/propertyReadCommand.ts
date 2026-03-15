@@ -6,7 +6,7 @@ import type { CommandContext, CommandModule } from "./types.js";
 
 type EntityMode = "application" | "database" | "group" | "record";
 
-interface PropertyGetInput {
+interface PropertyReadInput {
   mode: EntityMode;
   uuid?: string;
   db?: string;
@@ -14,15 +14,15 @@ interface PropertyGetInput {
   properties: string[];
 }
 
-export class PropertyGetCommand implements CommandModule<PropertyGetInput> {
-  readonly name = "property:get";
+export class PropertyReadCommand implements CommandModule<PropertyReadInput> {
+  readonly name = "property:read";
   readonly category = "Property";
   readonly description = "Read properties from any entity.";
 
   help(): string {
     return [
       "Usage:",
-      "  dt property:get [locator] <property> [<property> ...]",
+      "  dt property:read [locator] <property> [<property> ...]",
       "",
       "Locator determines entity type:",
       "  --uuid <uuid>             Record",
@@ -33,14 +33,14 @@ export class PropertyGetCommand implements CommandModule<PropertyGetInput> {
       "Property names are positional arguments.",
       "",
       "Examples:",
-      '  dt property:get inbox "incoming group"',
-      "  dt property:get --uuid ABC-123 name tags comment",
-      '  dt property:get --db "01. Personal" path root',
-      '  dt property:get --db "01. Personal" --at "/Projects" name comment'
+      '  dt property:read inbox "incoming group"',
+      "  dt property:read --uuid ABC-123 name tags comment",
+      '  dt property:read --db "01. Personal" path root',
+      '  dt property:read --db "01. Personal" --at "/Projects" name comment'
     ].join("\n");
   }
 
-  parse(argv: string[], context?: CommandContext): PropertyGetInput {
+  parse(argv: string[], context?: CommandContext): PropertyReadInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "db", "at"]);
 
@@ -57,7 +57,7 @@ export class PropertyGetCommand implements CommandModule<PropertyGetInput> {
     return { mode, uuid, db, at, properties };
   }
 
-  async execute(input: PropertyGetInput, context: CommandContext): Promise<void> {
+  async execute(input: PropertyReadInput, context: CommandContext): Promise<void> {
     let result;
 
     switch (input.mode) {

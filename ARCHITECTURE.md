@@ -21,12 +21,11 @@ The CLI is intentionally thin:
 
 The public surface uses task-oriented verbs with colon-namespaced grouping:
 
-- Core: `add`, `delete`, `move`, `list`, `search`
-- Property: `property:get`, `property:set`
-- Create: `create:location`, `create:record`
+- Core: `add`, `databases`, `delete`, `duplicate`, `get`, `groups`, `move`, `replicate`, `search`
+- Property: `property:read`, `property:set`
+- Create: `create:group`, `create:record`
 - Lookup: `lookup:file`, `lookup:tags`, `lookup:url`, `lookup:path`
 - AI: `ai:classify`, `ai:compare`
-- Record: `record:get`, `record:duplicate`, `record:replicate`
 - Other: `index`
 
 Locators are simplified:

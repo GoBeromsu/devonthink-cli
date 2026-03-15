@@ -4,7 +4,7 @@ import { parseJsonOutput, runCli } from "./helpers.js";
 describe("inbox database model executable spec", () => {
   it("treats the global inbox as an application/database property instead of a custom subsystem", async () => {
     const result = await runCli([
-      "property:get",
+      "property:read",
       "inbox",
       "incoming group"
     ]);
