@@ -1,7 +1,6 @@
 import { ValidationError } from "../application/errors.js";
 import type {
   ContainerReference,
-  DatabaseReference,
   DatabaseSelector,
   GroupReference,
   GroupSelector,
@@ -10,7 +9,6 @@ import type {
 } from "../application/types.js";
 import {
   getOption,
-  getOptions,
   type ParsedArgs
 } from "./args.js";
 
@@ -168,113 +166,3 @@ export function recordSelectorFromUuidOrPath(parsed: ParsedArgs): RecordSelector
   throw new ValidationError("Record locator requires --uuid or --database with --at.");
 }
 
-export function readRecordReference(
-  parsed: ParsedArgs,
-  role: string,
-  options: {
-    required?: boolean;
-    allowMany?: boolean;
-  } = {}
-): RecordReference | RecordReference[] | undefined {
-  const uuidOption = `${role}-uuid`;
-  const databaseOption = `${role}-database`;
-  const atOption = `${role}-at`;
-  const uuids = getOptions(parsed, uuidOption);
-  const database = getOption(parsed, databaseOption);
-  const at = getOption(parsed, atOption);
-
-  if (uuids.length > 0 && (database || at)) {
-    throw new ValidationError(
-      `Specify ${role} using either --${uuidOption} or --${databaseOption} with --${atOption}.`
-    );
-  }
-
-  if (uuids.length > 0) {
-    if (!options.allowMany && uuids.length > 1) {
-      throw new ValidationError(`--${uuidOption} can only be provided once.`);
-    }
-
-    const references = uuids.map<RecordReference>((uuid) => ({
-      $type: "record",
-      locator: { uuid }
-    }));
-
-    return options.allowMany ? references : references[0];
-  }
-
-  if (database || at) {
-    if (!database || !at) {
-      throw new ValidationError(
-        `${role} path lookup requires both --${databaseOption} and --${atOption}.`
-      );
-    }
-
-    return {
-      $type: "record",
-      locator: {
-        database: { identifier: database },
-        at
-      }
-    };
-  }
-
-  if (options.required) {
-    throw new ValidationError(
-      `Missing required locator for ${role}: --${uuidOption} or --${databaseOption} with --${atOption}.`
-    );
-  }
-
-  return undefined;
-}
-
-export function readContainerReference(
-  parsed: ParsedArgs,
-  role: string,
-  options: {
-    required?: boolean;
-    allowDatabaseOnly?: boolean;
-  } = {}
-): ContainerReference | GroupReference | DatabaseReference | undefined {
-  const databaseOption = `${role}-database`;
-  const atOption = `${role}-at`;
-  const database = getOption(parsed, databaseOption);
-  const at = getOption(parsed, atOption);
-
-  if (!database && !at) {
-    if (options.required) {
-      throw new ValidationError(
-        `Missing required locator for ${role}: --${databaseOption}${options.allowDatabaseOnly ? "" : ` and --${atOption}`}.`
-      );
-    }
-
-    return undefined;
-  }
-
-  if (!database) {
-    throw new ValidationError(`Missing required option for ${role}: --${databaseOption}.`);
-  }
-
-  const locator: GroupSelector = {
-    database: { identifier: database },
-    at
-  };
-
-  if (!at && !options.allowDatabaseOnly) {
-    return {
-      $type: "group",
-      locator
-    };
-  }
-
-  if (!at && options.allowDatabaseOnly) {
-    return {
-      $type: "container",
-      locator
-    };
-  }
-
-  return {
-    $type: options.allowDatabaseOnly ? "container" : "group",
-    locator
-  };
-}
