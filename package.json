@@ -29,7 +29,7 @@
   },
   "scripts": {
     "build": "node ./scripts/build.mjs",
-    "check": "tsc --noEmit",
+    "check": "tsc --noEmit && node ./scripts/validate-docs.mjs",
     "dt": "tsx ./src/cli.ts",
     "pack:check": "pnpm build && npm pack --dry-run",
     "publish:dry-run": "pnpm check && pnpm test && npm publish --dry-run --access public",
