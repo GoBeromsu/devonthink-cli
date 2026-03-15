@@ -1,0 +1,50 @@
+{
+  "name": "devonthink-cli",
+  "version": "0.1.0",
+  "description": "Pure CLI wrapper for the DEVONthink scripting dictionary.",
+  "type": "module",
+  "bin": {
+    "dt": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "devonthink",
+    "cli",
+    "macos",
+    "osascript",
+    "jxa",
+    "knowledge-management",
+    "devonthink-4"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "check": "tsc --noEmit",
+    "dt": "tsx ./src/cli.ts",
+    "pack:check": "pnpm build && npm pack --dry-run",
+    "publish:dry-run": "pnpm check && pnpm test && npm publish --dry-run --access public",
+    "publish:public": "npm publish --access public",
+    "prepack": "pnpm build",
+    "prepublishOnly": "pnpm check && pnpm test && pnpm pack:check",
+    "release:check": "pnpm check && pnpm test && pnpm pack:check",
+    "schema:refresh": "node ./scripts/refresh-schema.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  }
+}

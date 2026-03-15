@@ -1,0 +1,12 @@
+Title: Harness Engineering
+URL: https://openai.com/index/harness-engineering/
+
+Why this file exists:
+- This repository borrows its documentation layout and short-AGENTS model from this article.
+- Read this when the purpose of the docs structure becomes fuzzy.
+
+What to carry back into the repo:
+- Keep AGENTS.md short.
+- Keep durable knowledge in structured docs/.
+- Treat plans, specs, and generated artifacts as first-class repo objects.
+- Make behavior legible and verifiable for agents.

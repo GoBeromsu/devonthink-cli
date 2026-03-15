@@ -1,0 +1,2240 @@
+{
+  "generatedAt": "2026-03-15T12:21:50.766Z",
+  "sourceAppPath": "/Applications/DEVONthink.app",
+  "commands": {
+    "search": {
+      "name": "search",
+      "cliName": "search",
+      "methodName": "search",
+      "description": "Search for records in specified group or all databases.",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": true,
+        "description": "The search string. Supports keys, operators and wildcards.",
+        "types": [
+          {
+            "name": "text",
+            "list": false
+          },
+          {
+            "name": "missing value",
+            "list": false
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "comparison",
+          "key": "comparison",
+          "optionName": "comparison",
+          "optional": true,
+          "description": "The comparison to use (default no case).",
+          "types": [
+            {
+              "name": "search comparison",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "exclude subgroups",
+          "key": "excludeSubgroups",
+          "optionName": "exclude-subgroups",
+          "optional": true,
+          "description": "Don't search in subgroups of the specified group. Off by default.",
+          "types": [
+            {
+              "name": "boolean",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The group to search in. Searches in all databases if not specified.",
+          "types": [
+            {
+              "name": "parent",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": true
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "import path": {
+      "name": "import path",
+      "cliName": "import-path",
+      "methodName": "importPath",
+      "description": "Import a file or folder (including its subfolders).",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": false,
+        "description": "The POSIX path or file URL of the file or folder.",
+        "types": [
+          {
+            "name": "text",
+            "list": false
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "from",
+          "key": "from",
+          "optionName": "from",
+          "optional": true,
+          "description": "The name of the source application.",
+          "types": [
+            {
+              "name": "text",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "key": "name",
+          "optionName": "name",
+          "optional": true,
+          "description": "The name for the imported record.",
+          "types": [
+            {
+              "name": "text",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "placeholders",
+          "key": "placeholders",
+          "optionName": "placeholders",
+          "optional": true,
+          "description": "Optional placeholders as key-value-pairs for text, RTF/RTFD &amp; HTML/XML templates and filenames. NOTE: The standard placeholders of .dtTemplate packages are also supported if this parameter is specified.",
+          "types": [
+            {
+              "name": "dictionary",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "to",
+          "key": "to",
+          "optionName": "to",
+          "optional": true,
+          "description": "The destination group. Uses incoming group or group selector if not specified.",
+          "types": [
+            {
+              "name": "parent",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": false
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "index path": {
+      "name": "index path",
+      "cliName": "index-path",
+      "methodName": "indexPath",
+      "description": "Index a file or folder (including its subfolders). Not supported by revision-proof databases.",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": false,
+        "description": "The POSIX path or file URL of the file or folder.",
+        "types": [
+          {
+            "name": "text",
+            "list": false
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "to",
+          "key": "to",
+          "optionName": "to",
+          "optional": true,
+          "description": "The destination group. Uses incoming group or group selector if not specified.",
+          "types": [
+            {
+              "name": "parent",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": false
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "create location": {
+      "name": "create location",
+      "cliName": "create-location",
+      "methodName": "createLocation",
+      "description": "Create a hierarchy of groups if necessary.",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": false,
+        "description": "The hierarchy as a POSIX path (/ in names has to be replaced with \\/, see location property).",
+        "types": [
+          {
+            "name": "text",
+            "list": false
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The destination database or group. Uses current database if not specified.",
+          "types": [
+            {
+              "name": "database",
+              "list": false
+            },
+            {
+              "name": "parent",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "parent",
+          "list": false
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "create record with": {
+      "name": "create record with",
+      "cliName": "create-record-with",
+      "methodName": "createRecordWith",
+      "description": "Create a new record.",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": false,
+        "description": "The properties of the record. At least 'type' or 'record type' is required, its value can be also specified as a string.",
+        "types": [
+          {
+            "name": "dictionary",
+            "list": false
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The destination group for the new record. Uses incoming group or group selector if not specified.",
+          "types": [
+            {
+              "name": "parent",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": false
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "get record at": {
+      "name": "get record at",
+      "cliName": "get-record-at",
+      "methodName": "getRecordAt",
+      "description": "Search for record at the specified location.",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": false,
+        "description": "The location of the record as a POSIX path (/ in names has to be replaced with \\/, see location property).",
+        "types": [
+          {
+            "name": "text",
+            "list": false
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The base database or group. Uses current database if not specified.",
+          "types": [
+            {
+              "name": "database",
+              "list": false
+            },
+            {
+              "name": "parent",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": false
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "get record with uuid": {
+      "name": "get record with uuid",
+      "cliName": "get-record-with-uuid",
+      "methodName": "getRecordWithUuid",
+      "description": "Get record with the specified uuid or item link.",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": false,
+        "description": "The unique identifier or item link.",
+        "types": [
+          {
+            "name": "text",
+            "list": false
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The database. Uses all databases if not specified.",
+          "types": [
+            {
+              "name": "database",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": false
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "lookup records with file": {
+      "name": "lookup records with file",
+      "cliName": "lookup-records-with-file",
+      "methodName": "lookupRecordsWithFile",
+      "description": "Lookup records whose last path component is the specified file.",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": false,
+        "description": "The filename.",
+        "types": [
+          {
+            "name": "text",
+            "list": false
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The database. Uses current database if not specified",
+          "types": [
+            {
+              "name": "database",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "content",
+          "list": true
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "lookup records with path": {
+      "name": "lookup records with path",
+      "cliName": "lookup-records-with-path",
+      "methodName": "lookupRecordsWithPath",
+      "description": "Lookup records with specified path.",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": false,
+        "description": "The path.",
+        "types": [
+          {
+            "name": "text",
+            "list": false
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The database. Uses current database if not specified.",
+          "types": [
+            {
+              "name": "database",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": true
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "lookup records with tags": {
+      "name": "lookup records with tags",
+      "cliName": "lookup-records-with-tags",
+      "methodName": "lookupRecordsWithTags",
+      "description": "Lookup records with all or any of the specified tags.",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": false,
+        "description": "The tags.",
+        "types": [
+          {
+            "name": "text",
+            "list": true
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "any",
+          "key": "any",
+          "optionName": "any",
+          "optional": true,
+          "description": "Lookup any or all (default) tags.",
+          "types": [
+            {
+              "name": "boolean",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The database. Uses current database if not specified.",
+          "types": [
+            {
+              "name": "database",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": true
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "lookup records with URL": {
+      "name": "lookup records with URL",
+      "cliName": "lookup-records-with-url",
+      "methodName": "lookupRecordsWithURL",
+      "description": "Lookup records with specified URL.",
+      "directParameter": {
+        "name": "value",
+        "key": "value",
+        "optionName": "value",
+        "optional": false,
+        "description": "The URL (or path).",
+        "types": [
+          {
+            "name": "text",
+            "list": false
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The database. Uses current database if not specified.",
+          "types": [
+            {
+              "name": "database",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": true
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "move": {
+      "name": "move",
+      "cliName": "move",
+      "methodName": "move",
+      "description": "Move all instances of a record to a different group.  Specify the 'from' group to move a single instance to a different group.",
+      "directParameter": null,
+      "parameters": [
+        {
+          "name": "record",
+          "key": "record",
+          "optionName": "record",
+          "optional": false,
+          "description": "The record(s) to move. Indexed items are not supported by revision-proof databases.",
+          "types": [
+            {
+              "name": "record",
+              "list": false
+            },
+            {
+              "name": "record",
+              "list": true
+            }
+          ]
+        },
+        {
+          "name": "from",
+          "key": "from",
+          "optionName": "from",
+          "optional": true,
+          "description": "The source group. Only applicable if record and destination group are in the same database",
+          "types": [
+            {
+              "name": "parent",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "to",
+          "key": "to",
+          "optionName": "to",
+          "optional": false,
+          "description": "The destination group which doesn't have to be in the same database.",
+          "types": [
+            {
+              "name": "parent",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": false
+        },
+        {
+          "name": "record",
+          "list": true
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "delete": {
+      "name": "delete",
+      "cliName": "delete",
+      "methodName": "delete",
+      "description": "Delete all instances of a record from the database or one instance from the specified group.",
+      "directParameter": null,
+      "parameters": [
+        {
+          "name": "record",
+          "key": "record",
+          "optionName": "record",
+          "optional": false,
+          "description": "The record(s) to delete.",
+          "types": [
+            {
+              "name": "record",
+              "list": false
+            },
+            {
+              "name": "record",
+              "list": true
+            }
+          ]
+        },
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The parent group of this instance.",
+          "types": [
+            {
+              "name": "parent",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "boolean",
+          "list": false
+        }
+      ]
+    },
+    "duplicate": {
+      "name": "duplicate",
+      "cliName": "duplicate",
+      "methodName": "duplicate",
+      "description": "Duplicate a record.",
+      "directParameter": null,
+      "parameters": [
+        {
+          "name": "record",
+          "key": "record",
+          "optionName": "record",
+          "optional": false,
+          "description": "The record(s) to duplicate. Indexed items are not supported by revision-proof databases.",
+          "types": [
+            {
+              "name": "record",
+              "list": false
+            },
+            {
+              "name": "record",
+              "list": true
+            }
+          ]
+        },
+        {
+          "name": "to",
+          "key": "to",
+          "optionName": "to",
+          "optional": false,
+          "description": "The destination group which doesn't have to be in the same database.",
+          "types": [
+            {
+              "name": "parent",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": false
+        },
+        {
+          "name": "record",
+          "list": true
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "replicate": {
+      "name": "replicate",
+      "cliName": "replicate",
+      "methodName": "replicate",
+      "description": "Replicate a record.",
+      "directParameter": null,
+      "parameters": [
+        {
+          "name": "record",
+          "key": "record",
+          "optionName": "record",
+          "optional": false,
+          "description": "The record(s) to replicate.",
+          "types": [
+            {
+              "name": "record",
+              "list": false
+            },
+            {
+              "name": "record",
+              "list": true
+            }
+          ]
+        },
+        {
+          "name": "to",
+          "key": "to",
+          "optionName": "to",
+          "optional": false,
+          "description": "The destination group which must be in the same database.",
+          "types": [
+            {
+              "name": "parent",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "record",
+          "list": false
+        },
+        {
+          "name": "record",
+          "list": true
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "compare": {
+      "name": "compare",
+      "cliName": "compare",
+      "methodName": "compare",
+      "description": "Get a list of similar records, either by specifying a record or a content.",
+      "directParameter": null,
+      "parameters": [
+        {
+          "name": "record",
+          "key": "record",
+          "optionName": "record",
+          "optional": true,
+          "description": "The record to compare.",
+          "types": [
+            {
+              "name": "content",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "content",
+          "key": "content",
+          "optionName": "content",
+          "optional": true,
+          "description": "The content to compare.",
+          "types": [
+            {
+              "name": "text",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "to",
+          "key": "to",
+          "optionName": "to",
+          "optional": true,
+          "description": "The database. Uses all databases if not specified.",
+          "types": [
+            {
+              "name": "database",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "comparison",
+          "key": "comparison",
+          "optionName": "comparison",
+          "optional": true,
+          "description": "The comparison to use (default is data comparison).",
+          "types": [
+            {
+              "name": "comparison type",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "content",
+          "list": true
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    },
+    "classify": {
+      "name": "classify",
+      "cliName": "classify",
+      "methodName": "classify",
+      "description": "Get a list of classification proposals.",
+      "directParameter": null,
+      "parameters": [
+        {
+          "name": "record",
+          "key": "record",
+          "optionName": "record",
+          "optional": false,
+          "description": "The record to classify.",
+          "types": [
+            {
+              "name": "record",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "in",
+          "key": "in",
+          "optionName": "in",
+          "optional": true,
+          "description": "The database. Uses all databases if not specified.",
+          "types": [
+            {
+              "name": "database",
+              "list": false
+            },
+            {
+              "name": "missing value",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "comparison",
+          "key": "comparison",
+          "optionName": "comparison",
+          "optional": true,
+          "description": "The comparison to use (default is data comparison).",
+          "types": [
+            {
+              "name": "comparison type",
+              "list": false
+            }
+          ]
+        },
+        {
+          "name": "tags",
+          "key": "tags",
+          "optionName": "tags",
+          "optional": true,
+          "description": "Propose ordinary tags instead of groups (off by default).",
+          "types": [
+            {
+              "name": "boolean",
+              "list": false
+            }
+          ]
+        }
+      ],
+      "result": [
+        {
+          "name": "parent",
+          "list": true
+        },
+        {
+          "name": "missing value",
+          "list": false
+        }
+      ]
+    }
+  },
+  "objects": {
+    "application": {
+      "scriptClass": "application",
+      "properties": [
+        {
+          "name": "name",
+          "key": "name",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The name of the application.",
+          "inProperties": true
+        },
+        {
+          "name": "bates number",
+          "key": "batesNumber",
+          "access": "rw",
+          "writable": true,
+          "type": "integer",
+          "description": "Current bates number.",
+          "inProperties": true
+        },
+        {
+          "name": "cancelled progress",
+          "key": "cancelledProgress",
+          "access": "r",
+          "writable": false,
+          "type": "boolean",
+          "description": "Specifies if a process with a visible progress indicator should be cancelled.",
+          "inProperties": true
+        },
+        {
+          "name": "current chat engine",
+          "key": "currentChatEngine",
+          "access": "r",
+          "writable": false,
+          "type": "chat engine",
+          "description": "The default chat engine.",
+          "inProperties": true
+        },
+        {
+          "name": "current chat model",
+          "key": "currentChatModel",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The default chat model.",
+          "inProperties": true
+        },
+        {
+          "name": "current group",
+          "key": "currentGroup",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The (selected) group of the frontmost window of the current database. Returns root of current database if no current group exists.",
+          "inProperties": true
+        },
+        {
+          "name": "current workspace",
+          "key": "currentWorkspace",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The name of the currently used workspace.",
+          "inProperties": true
+        },
+        {
+          "name": "current database",
+          "key": "currentDatabase",
+          "access": "r",
+          "writable": false,
+          "type": "database",
+          "description": "The currently used database.",
+          "inProperties": true
+        },
+        {
+          "name": "content record",
+          "key": "contentRecord",
+          "access": "r",
+          "writable": false,
+          "type": "content",
+          "description": "The record of the visible document in the frontmost think window.",
+          "inProperties": true
+        },
+        {
+          "name": "inbox",
+          "key": "inbox",
+          "access": "r",
+          "writable": false,
+          "type": "database",
+          "description": "The global inbox.",
+          "inProperties": true
+        },
+        {
+          "name": "incoming group",
+          "key": "incomingGroup",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The default group for new notes. Either global inbox or incoming group of current database if global inbox isn't available.",
+          "inProperties": false
+        },
+        {
+          "name": "label names",
+          "key": "labelNames",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "List of all 7 label names.",
+          "inProperties": true
+        },
+        {
+          "name": "last downloaded response",
+          "key": "lastDownloadedResponse",
+          "access": "r",
+          "writable": false,
+          "type": "HTTP response",
+          "description": "The last downloaded HTTP(S) response.",
+          "inProperties": false
+        },
+        {
+          "name": "last downloaded URL",
+          "key": "lastDownloadedURL",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The actual URL of the last download.",
+          "inProperties": false
+        },
+        {
+          "name": "preferred import destination",
+          "key": "preferredImportDestination",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The default destination for data from external sources. See Settings &gt; Import &gt; Destination.",
+          "inProperties": false
+        },
+        {
+          "name": "reading list",
+          "key": "readingList",
+          "access": "r",
+          "writable": false,
+          "type": "reading list item",
+          "description": "The items of the reading list.",
+          "inProperties": false
+        },
+        {
+          "name": "selection",
+          "key": "selection",
+          "access": "r",
+          "writable": false,
+          "type": "record",
+          "description": "The current selection of the frontmost main window or the record of the frontmost document window. 'selected records' element is recommended instead especially for bulk retrieval of properties like UUID.",
+          "inProperties": true
+        },
+        {
+          "name": "strict duplicate recognition",
+          "key": "strictDuplicateRecognition",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Specifies if recognition of duplicates is strict (exact) or not (fuzzy).",
+          "inProperties": true
+        },
+        {
+          "name": "workspaces",
+          "key": "workspaces",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The names of all available workspaces.",
+          "inProperties": true
+        }
+      ]
+    },
+    "database": {
+      "scriptClass": "database",
+      "properties": [
+        {
+          "name": "id",
+          "key": "id",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The scripting identifier of a database.",
+          "inProperties": true
+        },
+        {
+          "name": "uuid",
+          "key": "uuid",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The unique and persistent identifier of a database for external referencing.",
+          "inProperties": true
+        },
+        {
+          "name": "annotations group",
+          "key": "annotationsGroup",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The group for annotations, will be created if necessary.",
+          "inProperties": false
+        },
+        {
+          "name": "comment",
+          "key": "comment",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The comment of the database.",
+          "inProperties": true
+        },
+        {
+          "name": "current group",
+          "key": "currentGroup",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The (selected) group of the frontmost window. Returns root if no current group exists.",
+          "inProperties": true
+        },
+        {
+          "name": "incoming group",
+          "key": "incomingGroup",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The default group for new notes. Might be identical to root.",
+          "inProperties": true
+        },
+        {
+          "name": "encrypted",
+          "key": "encrypted",
+          "access": "r",
+          "writable": false,
+          "type": "boolean",
+          "description": "Specifies if a database is encrypted or not.",
+          "inProperties": true
+        },
+        {
+          "name": "revision proof",
+          "key": "revisionProof",
+          "access": "r",
+          "writable": false,
+          "type": "boolean",
+          "description": "Specifies if a database is revision-proof or not.",
+          "inProperties": true
+        },
+        {
+          "name": "read only",
+          "key": "readOnly",
+          "access": "r",
+          "writable": false,
+          "type": "boolean",
+          "description": "Specifies if a database is read-only and can't be modified.",
+          "inProperties": true
+        },
+        {
+          "name": "Spotlight indexing",
+          "key": "spotlightIndexing",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Specifies if Spotlight indexing of a database is en- or disabled.",
+          "inProperties": true
+        },
+        {
+          "name": "versioning",
+          "key": "versioning",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Specifies whether versioning of documents is en- or disabled.",
+          "inProperties": true
+        },
+        {
+          "name": "name",
+          "key": "name",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The name of the database.",
+          "inProperties": true
+        },
+        {
+          "name": "filename",
+          "key": "filename",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The filename of the database.",
+          "inProperties": true
+        },
+        {
+          "name": "path",
+          "key": "path",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The POSIX path of the database.",
+          "inProperties": true
+        },
+        {
+          "name": "root",
+          "key": "root",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The top level group of the database.",
+          "inProperties": true
+        },
+        {
+          "name": "tags group",
+          "key": "tagsGroup",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The group for tags.",
+          "inProperties": true
+        },
+        {
+          "name": "trash group",
+          "key": "trashGroup",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The trash's group.",
+          "inProperties": true
+        },
+        {
+          "name": "versions group",
+          "key": "versionsGroup",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The group for versioning.",
+          "inProperties": true
+        }
+      ]
+    },
+    "group": {
+      "scriptClass": "parent",
+      "properties": []
+    },
+    "record": {
+      "scriptClass": "record",
+      "properties": [
+        {
+          "name": "id",
+          "key": "id",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The scripting identifier of a record. Optimizing or closing a database might modify this identifier.",
+          "inProperties": true
+        },
+        {
+          "name": "MIME type",
+          "key": "mimeType",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The (proposed) MIME type of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "uuid",
+          "key": "uuid",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The unique and persistent identifier of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "addition date",
+          "key": "additionDate",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "Date when the record was added to the database.",
+          "inProperties": true
+        },
+        {
+          "name": "aliases",
+          "key": "aliases",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "Wiki aliases (separated by commas or semicolons) of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "altitude",
+          "key": "altitude",
+          "access": "rw",
+          "writable": true,
+          "type": "real",
+          "description": "The altitude in metres of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "annotation",
+          "key": "annotation",
+          "access": "rw",
+          "writable": true,
+          "type": "content",
+          "description": "Annotation of a record. Only plain &amp; rich text and Markdown documents are supported. Read-only in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "annotation count",
+          "key": "annotationCount",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The number of annotations. Supported by HTML pages, formatted notes, web archives, PDF, rich text &amp; Markdown documents.",
+          "inProperties": true
+        },
+        {
+          "name": "attached script",
+          "key": "attachedScript",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "POSIX path of script attached to a record.",
+          "inProperties": true
+        },
+        {
+          "name": "attachment count",
+          "key": "attachmentCount",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The number of attachments. Currently only supported for RTFD documents and emails.",
+          "inProperties": true
+        },
+        {
+          "name": "attributes change date",
+          "key": "attributesChangeDate",
+          "access": "rw",
+          "writable": true,
+          "type": "date",
+          "description": "The change date of the record's attributes.",
+          "inProperties": true
+        },
+        {
+          "name": "bates number",
+          "key": "batesNumber",
+          "access": "rw",
+          "writable": true,
+          "type": "integer",
+          "description": "Bates number.",
+          "inProperties": true
+        },
+        {
+          "name": "cells",
+          "key": "cells",
+          "access": "rw",
+          "writable": true,
+          "type": "array",
+          "description": "The cells of a sheet. This is a list of rows, each row contains a list of string values for the various colums. Read-only in case of revision-proof databases.",
+          "inProperties": false
+        },
+        {
+          "name": "character count",
+          "key": "characterCount",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The character count of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "color",
+          "key": "color",
+          "access": "rw",
+          "writable": true,
+          "type": "RGB color",
+          "description": "The color of a record. Currently only supported by tags &amp; groups.",
+          "inProperties": true
+        },
+        {
+          "name": "columns",
+          "key": "columns",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The column names of a sheet.",
+          "inProperties": false
+        },
+        {
+          "name": "comment",
+          "key": "comment",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The comment of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "content hash",
+          "key": "contentHash",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "Stored SHA1 hash of files and document packages.",
+          "inProperties": true
+        },
+        {
+          "name": "creation date",
+          "key": "creationDate",
+          "access": "rw",
+          "writable": true,
+          "type": "date",
+          "description": "The creation date of a record. Read-only in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "custom meta data",
+          "key": "customMetaData",
+          "access": "rw",
+          "writable": true,
+          "type": "dictionary",
+          "description": "User-defined metadata of a record as a dictionary containing key-value pairs. Setting a value for an unknown key automatically adds a definition to Settings &gt; Data.",
+          "inProperties": true
+        },
+        {
+          "name": "data",
+          "key": "data",
+          "access": "rw",
+          "writable": true,
+          "type": "raw data",
+          "description": "The file data of a record. Currently only supported by PDF documents, images, rich text documents and web archives. Read-only in case of revision-proof databases.",
+          "inProperties": false
+        },
+        {
+          "name": "database",
+          "key": "database",
+          "access": "r",
+          "writable": false,
+          "type": "database",
+          "description": "The database of the record.",
+          "inProperties": true
+        },
+        {
+          "name": "date",
+          "key": "date",
+          "access": "rw",
+          "writable": true,
+          "type": "date",
+          "description": "The (creation/modification) date of a record. Read-only in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "digital object identifier",
+          "key": "digitalObjectIdentifier",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "Digital object identifier (DOI) extracted from text of document, e.g. a scanned receipt, or from the title.",
+          "inProperties": false
+        },
+        {
+          "name": "dimensions",
+          "key": "dimensions",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The width and height of an image or PDF document in pixels or points.",
+          "inProperties": true
+        },
+        {
+          "name": "document amount",
+          "key": "documentAmount",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "Amount extracted from text of document, e.g. a scanned receipt.",
+          "inProperties": false
+        },
+        {
+          "name": "document date",
+          "key": "documentDate",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "First date extracted from text of document, e.g. a scan.",
+          "inProperties": false
+        },
+        {
+          "name": "all document dates",
+          "key": "allDocumentDates",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "All dates extracted from text of document, e.g. a scan.",
+          "inProperties": false
+        },
+        {
+          "name": "document name",
+          "key": "documentName",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "Name based on text or properties of document",
+          "inProperties": false
+        },
+        {
+          "name": "dpi",
+          "key": "dpi",
+          "access": "r",
+          "writable": false,
+          "type": "number",
+          "description": "The resultion of an image in dpi.",
+          "inProperties": true
+        },
+        {
+          "name": "duplicates",
+          "key": "duplicates",
+          "access": "r",
+          "writable": false,
+          "type": "record",
+          "description": "The duplicates of a record (only other instances, not including the record).",
+          "inProperties": true
+        },
+        {
+          "name": "duration",
+          "key": "duration",
+          "access": "r",
+          "writable": false,
+          "type": "real",
+          "description": "The duration of audio and video files.",
+          "inProperties": true
+        },
+        {
+          "name": "encrypted",
+          "key": "encrypted",
+          "access": "r",
+          "writable": false,
+          "type": "boolean",
+          "description": "Specifies if a document is encrypted or not. Currently only supported by PDF documents.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from chat",
+          "key": "excludeFromChat",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude group or record from chat.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from classification",
+          "key": "excludeFromClassification",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude group or record from classifying.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from search",
+          "key": "excludeFromSearch",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude group or record from searching.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from see also",
+          "key": "excludeFromSeeAlso",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude record from see also.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from tagging",
+          "key": "excludeFromTagging",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude group from tagging.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from Wiki linking",
+          "key": "excludeFromWikiLinking",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude record from automatic Wiki linking.",
+          "inProperties": true
+        },
+        {
+          "name": "filename",
+          "key": "filename",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The current filename of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "flag",
+          "key": "flag",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "The flag of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "geolocation",
+          "key": "geolocation",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The human readable geogr. location of a record.",
+          "inProperties": false
+        },
+        {
+          "name": "height",
+          "key": "height",
+          "access": "r",
+          "writable": false,
+          "type": "number",
+          "description": "The height of an image or PDF document in pixels or points.",
+          "inProperties": true
+        },
+        {
+          "name": "image",
+          "key": "image",
+          "access": "rw",
+          "writable": true,
+          "type": "any",
+          "description": "The image or PDF document of a record. Setting supports both raw data and strings containing paths or URLs. Read-only in case of revision-proof databases.",
+          "inProperties": false
+        },
+        {
+          "name": "indexed",
+          "key": "indexed",
+          "access": "r",
+          "writable": false,
+          "type": "boolean",
+          "description": "Indexed or imported record.",
+          "inProperties": true
+        },
+        {
+          "name": "international standard book number",
+          "key": "internationalStandardBookNumber",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "International standard book number (ISBN) extracted from text of document, e.g. a scanned receipt, or from the title.",
+          "inProperties": false
+        },
+        {
+          "name": "interval",
+          "key": "interval",
+          "access": "rw",
+          "writable": true,
+          "type": "real",
+          "description": "Refresh interval of a feed. Currently overriden by settings.",
+          "inProperties": true
+        },
+        {
+          "name": "kind",
+          "key": "kind",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The human readable and localized kind of a record. WARNING: Don't use this to check the type of a record, otherwise your script might fail depending on the version and the localization.",
+          "inProperties": true
+        },
+        {
+          "name": "label",
+          "key": "label",
+          "access": "rw",
+          "writable": true,
+          "type": "integer",
+          "description": "Index of label (0-7) of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "language",
+          "key": "language",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "ISO code, e.g. 'en' or 'de', of language of document.",
+          "inProperties": true
+        },
+        {
+          "name": "latitude",
+          "key": "latitude",
+          "access": "rw",
+          "writable": true,
+          "type": "real",
+          "description": "The latitude in degrees of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "location",
+          "key": "location",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The primary location of the record in the database as a POSIX path (/ in names is replaced with \\/).",
+          "inProperties": true
+        },
+        {
+          "name": "location group",
+          "key": "locationGroup",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The group of the record's primary location. This is identical to the first parent group.",
+          "inProperties": true
+        },
+        {
+          "name": "location with name",
+          "key": "locationWithName",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The full primary location of the record including its name (/ in names is replaced with \\/).",
+          "inProperties": true
+        },
+        {
+          "name": "locking",
+          "key": "locking",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "The locking of a record. Read-only in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "longitude",
+          "key": "longitude",
+          "access": "rw",
+          "writable": true,
+          "type": "real",
+          "description": "The longitude in degrees of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "markdown source",
+          "key": "markdownSource",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The Markdown source of a record if available or the record converted to Markdown if possible.",
+          "inProperties": false
+        },
+        {
+          "name": "meta data",
+          "key": "metaData",
+          "access": "r",
+          "writable": false,
+          "type": "dictionary",
+          "description": "Document metadata (e.g. of PDF &amp; RTF documents, web pages or emails) of a record as a dictionary containing key-value pairs.",
+          "inProperties": true
+        },
+        {
+          "name": "modification date",
+          "key": "modificationDate",
+          "access": "rw",
+          "writable": true,
+          "type": "date",
+          "description": "The modification date of a record. Read-only in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "name",
+          "key": "name",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The name of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "name without date",
+          "key": "nameWithoutDate",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The name of a record without any dates.",
+          "inProperties": true
+        },
+        {
+          "name": "name without extension",
+          "key": "nameWithoutExtension",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The name of a record without a file extension (independent of settings).",
+          "inProperties": true
+        },
+        {
+          "name": "newest document date",
+          "key": "newestDocumentDate",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "Newest date extracted from text of document, e.g. a scan.",
+          "inProperties": false
+        },
+        {
+          "name": "number of duplicates",
+          "key": "numberOfDuplicates",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The number of duplicates of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "number of hits",
+          "key": "numberOfHits",
+          "access": "rw",
+          "writable": true,
+          "type": "integer",
+          "description": "The number of hits of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "number of replicants",
+          "key": "numberOfReplicants",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The number of replicants of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "oldest document date",
+          "key": "oldestDocumentDate",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "Oldest date extracted from text of document, e.g. a scan.",
+          "inProperties": false
+        },
+        {
+          "name": "original name",
+          "key": "originalName",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The original name of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "opening date",
+          "key": "openingDate",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "Date when a content was opened the last time or when a feed was refreshed the last time.",
+          "inProperties": true
+        },
+        {
+          "name": "page count",
+          "key": "pageCount",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The page count of a record. Currently only supported by PDF documents.",
+          "inProperties": true
+        },
+        {
+          "name": "paginated PDF",
+          "key": "paginatedPDF",
+          "access": "r",
+          "writable": false,
+          "type": "raw data",
+          "description": "A printed/converted PDF of the record.",
+          "inProperties": false
+        },
+        {
+          "name": "path",
+          "key": "path",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The POSIX file path of a record. Only the path of external records can be changed. Not accessible at all in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "pending",
+          "key": "pending",
+          "access": "r",
+          "writable": false,
+          "type": "boolean",
+          "description": "Flag whether the (latest) contents of a record haven't been downloaded from a sync location yet.",
+          "inProperties": true
+        },
+        {
+          "name": "plain text",
+          "key": "plainText",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The plain text of a record. Read-only in case of revision-proof databases. Setting this property of images, PDF documents, audio or video files sets the searchable, e.g. transcribed, text.",
+          "inProperties": false
+        },
+        {
+          "name": "proposed filename",
+          "key": "proposedFilename",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The proposed filename for a record.",
+          "inProperties": true
+        },
+        {
+          "name": "rating",
+          "key": "rating",
+          "access": "rw",
+          "writable": true,
+          "type": "integer",
+          "description": "Rating (0-5) of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "record type",
+          "key": "recordType",
+          "access": "r",
+          "writable": false,
+          "type": "data type",
+          "description": "The type of a record. WARNING: Don't use string conversions of this type for comparisons, this might fail due to known scripting issues of macOS.",
+          "inProperties": true
+        },
+        {
+          "name": "reference URL",
+          "key": "referenceURL",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The URL (x-devonthink-item://...) to reference/link back to a record.",
+          "inProperties": true
+        },
+        {
+          "name": "reminder",
+          "key": "reminder",
+          "access": "rw",
+          "writable": true,
+          "type": "reminder",
+          "description": "Reminder of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "rich text",
+          "key": "richText",
+          "access": "rw",
+          "writable": true,
+          "type": "rich text",
+          "description": "The rich text of the record (see extended text suite). Changes are only supported in case of RTF/RTFD documents and not by revision-proof databases.",
+          "inProperties": false
+        },
+        {
+          "name": "score",
+          "key": "score",
+          "access": "r",
+          "writable": false,
+          "type": "real",
+          "description": "The score of the last comparison, classification or search (value between 0.0 and 1.0) or undefined otherwise.",
+          "inProperties": true
+        },
+        {
+          "name": "size",
+          "key": "size",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The size of a record in bytes.",
+          "inProperties": true
+        },
+        {
+          "name": "source",
+          "key": "source",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The HTML/XML source of a record if available or the record converted to HTML if possible. Read-only in case of revision-proof databases.",
+          "inProperties": false
+        },
+        {
+          "name": "tag type",
+          "key": "tagType",
+          "access": "r",
+          "writable": false,
+          "type": "tag type",
+          "description": "The tag type of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "tags",
+          "key": "tags",
+          "access": "rw",
+          "writable": true,
+          "type": "array",
+          "description": "The tags of a record. Setting accepts both strings and parents.",
+          "inProperties": true
+        },
+        {
+          "name": "thumbnail",
+          "key": "thumbnail",
+          "access": "rw",
+          "writable": true,
+          "type": "any",
+          "description": "The thumbnail of a record. Setting supports both raw data and strings containing paths or URLs.",
+          "inProperties": false
+        },
+        {
+          "name": "unlinked Wiki links",
+          "key": "unlinkedWikiLinks",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "List of Wiki links not yet referencing an item in the database. NOTE: This list depends on the Wiki linking settings.",
+          "inProperties": true
+        },
+        {
+          "name": "unread",
+          "key": "unread",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "The unread flag of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "URL",
+          "key": "url",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The URL of a record. Read-only in case of bookmarks in revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "web archive",
+          "key": "webArchive",
+          "access": "r",
+          "writable": false,
+          "type": "raw data",
+          "description": "The web archive of a record if available or the record converted to web archive if possible.",
+          "inProperties": false
+        },
+        {
+          "name": "width",
+          "key": "width",
+          "access": "r",
+          "writable": false,
+          "type": "number",
+          "description": "The width of an image or PDF document in pixels or points.",
+          "inProperties": true
+        },
+        {
+          "name": "word count",
+          "key": "wordCount",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The word count of a record.",
+          "inProperties": true
+        }
+      ]
+    }
+  },
+  "enums": {
+    "comparison type": [
+      "data comparison",
+      "tags comparison"
+    ],
+    "search comparison": [
+      "no case",
+      "no umlauts",
+      "fuzzy",
+      "related"
+    ],
+    "data type": [
+      "group",
+      "smart group",
+      "feed",
+      "bookmark",
+      "formatted note",
+      "HTML",
+      "webarchive",
+      "markdown",
+      "txt",
+      "RTF",
+      "RTFD",
+      "picture",
+      "multimedia",
+      "PDF document",
+      "sheet",
+      "XML",
+      "property list",
+      "AppleScript file",
+      "email",
+      "unknown"
+    ],
+    "tag type": [
+      "no tag",
+      "ordinary tag",
+      "group tag"
+    ]
+  }
+}

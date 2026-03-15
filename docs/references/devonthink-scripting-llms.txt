@@ -1,0 +1,9 @@
+Title: DEVONthink Scripting Dictionary
+URL: local command: sdef /Applications/DEVONthink.app
+
+Why this file exists:
+- This is the authority for what the CLI may expose.
+
+What to carry back into the repo:
+- If a command or property is not in the scripting dictionary, do not add it as runtime product behavior.
+- Refresh the checked-in schema artifact when the dictionary changes.
