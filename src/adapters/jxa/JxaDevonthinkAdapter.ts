@@ -174,7 +174,7 @@ export class JxaDevonthinkAdapter implements DevonthinkPort {
       payload = JSON.parse(output) as JxaResponse<T>;
     } catch (error) {
       throw new ExternalToolError(
-        `Failed to parse DEVONthink response: ${output || String(error)}`
+        `Failed to parse DEVONthink response: ${String(error)}. stdout=${result.stdout.trim() || "(empty)"}, stderr=${result.stderr.trim() || "(empty)"}`
       );
     }
 

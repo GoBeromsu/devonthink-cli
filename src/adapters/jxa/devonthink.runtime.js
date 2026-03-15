@@ -26,7 +26,7 @@ function dispatch(app, operation, input) {
       );
     case "setDatabase": {
       var database = resolveDatabase(app, input.locator);
-      applyPropertyValues(database, input.values || {}, input.propertyRequest.propertySpecs);
+      applyPropertyValues(app, database, input.values || {}, input.propertyRequest.propertySpecs);
       return serializeEntity(database, input.propertyRequest, input.schemaObjects || null);
     }
     case "listGroups": {
@@ -45,7 +45,7 @@ function dispatch(app, operation, input) {
       );
     case "setGroup": {
       var group = resolveGroup(app, input.locator);
-      applyPropertyValues(group, input.values || {}, input.propertyRequest.propertySpecs);
+      applyPropertyValues(app, group, input.values || {}, input.propertyRequest.propertySpecs);
       return serializeEntity(group, input.propertyRequest, input.schemaObjects || null);
     }
     case "getRecord":
@@ -56,7 +56,7 @@ function dispatch(app, operation, input) {
       );
     case "setRecord": {
       var record = resolveRecord(app, input.locator);
-      applyPropertyValues(record, input.values || {}, input.propertyRequest.propertySpecs);
+      applyPropertyValues(app, record, input.values || {}, input.propertyRequest.propertySpecs);
       return serializeEntity(record, input.propertyRequest, input.schemaObjects || null);
     }
     case "invokeCommand":
@@ -289,13 +289,13 @@ function resolveRecord(app, locator) {
   return record;
 }
 
-function applyPropertyValues(entity, values, propertySpecs) {
+function applyPropertyValues(app, entity, values, propertySpecs) {
   Object.keys(values).forEach(function (name) {
     var spec = findPropertySpec(propertySpecs, name);
     if (!spec) {
       throw appError("VALIDATION_ERROR", "Unknown property: " + name);
     }
-    entity[spec.key] = resolveCommandValue(null, values[name]);
+    entity[spec.key] = resolveCommandValue(app, values[name]);
   });
 }
 

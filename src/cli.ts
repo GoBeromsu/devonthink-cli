@@ -9,7 +9,6 @@ export async function runCli(argv: string[]): Promise<void> {
 }
 
 runCli(process.argv.slice(2)).catch((error) => {
-  const runtime = createRuntime();
-  runtime.output.writeError(toErrorMessage(error));
+  process.stderr.write(`${toErrorMessage(error)}\n`);
   process.exit(toExitCode(error));
 });

@@ -66,16 +66,6 @@ export function hasBoolean(parsed: ParsedArgs, name: string): boolean {
   return parsed.booleans.has(name);
 }
 
-export function requireOption(parsed: ParsedArgs, name: string): string {
-  const value = getOption(parsed, name);
-
-  if (!value) {
-    throw new ValidationError(`Missing required option: --${name}`);
-  }
-
-  return value;
-}
-
 export function assertNoUnknownOptions(
   parsed: ParsedArgs,
   allowed: readonly string[]
@@ -93,18 +83,6 @@ export function assertNoUnknownOptions(
       throw new ValidationError(`Unknown option: --${key}`);
     }
   }
-}
-
-export function requirePositionals(
-  parsed: ParsedArgs,
-  count: number,
-  message?: string
-): string[] {
-  if (parsed.positionals.length < count) {
-    throw new ValidationError(message ?? `Expected at least ${count} positional argument(s).`);
-  }
-
-  return parsed.positionals;
 }
 
 function appendOption(map: Map<string, string[]>, key: string, value: string): void {

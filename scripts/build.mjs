@@ -1,4 +1,4 @@
-import { cp, chmod, mkdir, rm } from "node:fs/promises";
+import { cp, chmod, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -18,7 +18,13 @@ await cp(
   path.resolve(distSchemaDir, "devonthink-schema.json")
 );
 await cp(sourceRuntimePath, distRuntimePath);
-await chmod(path.resolve(distDir, "cli.js"), 0o755);
+const cliPath = path.resolve(distDir, "cli.js");
+const cliSource = await readFile(cliPath, "utf8");
+const withShebang = cliSource.startsWith("#!")
+  ? cliSource.replace(/^#!.*\n/, "#!/usr/bin/env node\n")
+  : `#!/usr/bin/env node\n${cliSource}`;
+await writeFile(cliPath, withShebang);
+await chmod(cliPath, 0o755);
 
 async function run(command, args) {
   await new Promise((resolve, reject) => {
