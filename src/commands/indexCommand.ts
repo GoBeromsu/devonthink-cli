@@ -1,6 +1,10 @@
 import { ValidationError } from "../application/errors.js";
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  parseArgs
+} from "../utils/args.js";
 import { buildGroupRef } from "../utils/locators.js";
 import { renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -29,6 +33,7 @@ export class IndexCommand implements CommandModule<DevonthinkCommandInput> {
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["db", "at"]);
+    assertNoMissingOptionValues(parsed, ["db", "at"]);
 
     const path = parsed.positionals[0];
     if (!path) {

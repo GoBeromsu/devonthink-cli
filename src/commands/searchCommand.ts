@@ -1,5 +1,10 @@
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, getOption, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  getOption,
+  parseArgs
+} from "../utils/args.js";
 import { buildGroupRef } from "../utils/locators.js";
 import { parseBooleanOption, renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -29,6 +34,7 @@ export class SearchCommand implements CommandModule<DevonthinkCommandInput> {
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["db", "at", "comparison", "exclude-subgroups"]);
+    assertNoMissingOptionValues(parsed, ["db", "at", "comparison"]);
 
     const query = parsed.positionals[0];
     const inRef = buildGroupRef(parsed, "db", "at");

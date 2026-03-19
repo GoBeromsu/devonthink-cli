@@ -1,6 +1,10 @@
 import { ValidationError } from "../application/errors.js";
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  parseArgs
+} from "../utils/args.js";
 import { buildContainerRef } from "../utils/locators.js";
 import { renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -27,6 +31,7 @@ export class LookupUrlCommand implements CommandModule<DevonthinkCommandInput> {
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["db"]);
+    assertNoMissingOptionValues(parsed, ["db"]);
 
     const url = parsed.positionals[0];
     if (!url) {

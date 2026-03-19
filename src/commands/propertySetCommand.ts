@@ -1,7 +1,16 @@
 import { ValidationError } from "../application/errors.js";
 import type { JsonValue, SchemaObjectKind } from "../application/types.js";
-import { assertNoUnknownOptions, getOption, parseArgs } from "../utils/args.js";
-import { parseSetExpressions, renderJson } from "./helpers.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  getOption,
+  parseArgs
+} from "../utils/args.js";
+import {
+  ensureExclusiveRecordLocator,
+  parseSetExpressions,
+  renderJson
+} from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
 
 type EntityMode = "database" | "group" | "record";
@@ -41,10 +50,12 @@ export class PropertySetCommand implements CommandModule<PropertySetInput> {
   parse(argv: string[], context?: CommandContext): PropertySetInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "db", "at"]);
+    assertNoMissingOptionValues(parsed, ["uuid", "db", "at"]);
 
     const uuid = getOption(parsed, "uuid");
     const db = getOption(parsed, "db");
     const at = getOption(parsed, "at");
+    ensureExclusiveRecordLocator(uuid, db, at, "property:set");
 
     const mode = resolveMode(uuid, db, at);
     const kind: SchemaObjectKind = mode;

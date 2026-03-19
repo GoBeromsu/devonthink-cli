@@ -85,6 +85,17 @@ export function assertNoUnknownOptions(
   }
 }
 
+export function assertNoMissingOptionValues(
+  parsed: ParsedArgs,
+  optionNames: readonly string[]
+): void {
+  for (const name of optionNames) {
+    if (parsed.booleans.has(name)) {
+      throw new ValidationError(`Option --${name} requires a value.`);
+    }
+  }
+}
+
 function appendOption(map: Map<string, string[]>, key: string, value: string): void {
   const existing = map.get(key);
 

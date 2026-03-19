@@ -1,6 +1,11 @@
 import { ValidationError } from "../application/errors.js";
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, getOption, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  getOption,
+  parseArgs
+} from "../utils/args.js";
 import { buildGroupRef } from "../utils/locators.js";
 import { renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -30,6 +35,7 @@ export class AddCommand implements CommandModule<DevonthinkCommandInput> {
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["db", "at", "name"]);
+    assertNoMissingOptionValues(parsed, ["db", "at", "name"]);
 
     const path = parsed.positionals[0];
     if (!path) {

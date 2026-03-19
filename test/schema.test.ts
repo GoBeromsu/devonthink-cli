@@ -6,8 +6,13 @@ describe("DEVONthink schema artifact", () => {
     const applicationProperties = devonthinkSchema.objects.application.properties.map(
       (property) => property.name
     );
+    const groupProperties = devonthinkSchema.objects.group.properties.map(
+      (property) => property.name
+    );
     expect(applicationProperties).toContain("inbox");
     expect(applicationProperties).toContain("incoming group");
+    expect(groupProperties).toContain("name");
+    expect(groupProperties).toContain("comment");
   });
 
   it("normalizes command cli names and parameter keys from the scripting dictionary", () => {

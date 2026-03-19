@@ -36,8 +36,24 @@ describe("project ingest executable spec", () => {
     ], dbList.port);
     expect(imported.code).toBe(0);
     const importedRecord = parseJsonOutput(imported.stdout) as Record<string, unknown>;
-    expect(importedRecord.name).toBe("NewPaper.pdf");
-    expect(importedRecord.path).toBe("/Users/beomsu/Downloads/NewPaper.pdf");
+    expect(importedRecord.name).toBe("NewPaper");
+    expect(String(importedRecord.path)).toContain("Files.noindex");
+    expect(String(importedRecord.path)).toContain("NewPaper.pdf");
+
+    const lookedUp = await runCli([
+      "lookup:path",
+      String(importedRecord.path),
+      "--db",
+      "01. Personal"
+    ], dbList.port);
+    expect(lookedUp.code).toBe(0);
+    expect(parseJsonOutput(lookedUp.stdout)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          uuid: importedRecord.uuid
+        })
+      ])
+    );
 
     const updated = await runCli([
       "property:set",

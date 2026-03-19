@@ -1,5 +1,9 @@
 import type { DevonthinkCommandInput } from "../application/types.js";
-import { assertNoUnknownOptions, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  parseArgs
+} from "../utils/args.js";
 import { buildGroupRef, buildRecordRef } from "../utils/locators.js";
 import { ensureNoPositionals, renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -28,10 +32,11 @@ export class RecordReplicateCommand implements CommandModule<DevonthinkCommandIn
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "to-db", "to"]);
+    assertNoMissingOptionValues(parsed, ["uuid", "to-db", "to"]);
     ensureNoPositionals(parsed, "replicate");
 
     const record = buildRecordRef(parsed, "uuid", { required: true })!;
-    const to = buildGroupRef(parsed, "to-db", "to", { required: true })!;
+    const to = buildGroupRef(parsed, "to-db", "to", { required: true, requireAt: true })!;
 
     return {
       commandName: "replicate",

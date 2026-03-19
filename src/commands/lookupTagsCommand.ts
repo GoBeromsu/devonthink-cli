@@ -1,6 +1,10 @@
 import { ValidationError } from "../application/errors.js";
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  parseArgs
+} from "../utils/args.js";
 import { buildContainerRef } from "../utils/locators.js";
 import { parseBooleanOption, renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -28,6 +32,7 @@ export class LookupTagsCommand implements CommandModule<DevonthinkCommandInput> 
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["db", "any"]);
+    assertNoMissingOptionValues(parsed, ["db"]);
 
     if (parsed.positionals.length === 0) {
       throw new ValidationError("At least one tag is required.");

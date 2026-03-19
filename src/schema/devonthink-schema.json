@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-15T12:21:50.766Z",
+  "generatedAt": "2026-03-19T15:04:25.267Z",
   "sourceAppPath": "/Applications/DEVONthink.app",
   "commands": {
     "search": {
@@ -11,15 +11,11 @@
         "name": "value",
         "key": "value",
         "optionName": "value",
-        "optional": true,
+        "optional": false,
         "description": "The search string. Supports keys, operators and wildcards.",
         "types": [
           {
             "name": "text",
-            "list": false
-          },
-          {
-            "name": "missing value",
             "list": false
           }
         ]
@@ -56,7 +52,7 @@
           "key": "in",
           "optionName": "in",
           "optional": true,
-          "description": "The group to search in. Searches in all databases if not specified.",
+          "description": "The group to search in. Searches in all databases or in the search scope if not specified",
           "types": [
             {
               "name": "parent",
@@ -1362,7 +1358,836 @@
     },
     "group": {
       "scriptClass": "parent",
-      "properties": []
+      "properties": [
+        {
+          "name": "id",
+          "key": "id",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The scripting identifier of a record. Optimizing or closing a database might modify this identifier.",
+          "inProperties": true
+        },
+        {
+          "name": "MIME type",
+          "key": "mimeType",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The (proposed) MIME type of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "uuid",
+          "key": "uuid",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The unique and persistent identifier of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "addition date",
+          "key": "additionDate",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "Date when the record was added to the database.",
+          "inProperties": true
+        },
+        {
+          "name": "aliases",
+          "key": "aliases",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "Wiki aliases (separated by commas or semicolons) of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "altitude",
+          "key": "altitude",
+          "access": "rw",
+          "writable": true,
+          "type": "real",
+          "description": "The altitude in metres of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "annotation",
+          "key": "annotation",
+          "access": "rw",
+          "writable": true,
+          "type": "content",
+          "description": "Annotation of a record. Only plain &amp; rich text and Markdown documents are supported. Read-only in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "annotation count",
+          "key": "annotationCount",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The number of annotations. Supported by HTML pages, formatted notes, web archives, PDF, rich text &amp; Markdown documents.",
+          "inProperties": true
+        },
+        {
+          "name": "attached script",
+          "key": "attachedScript",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "POSIX path of script attached to a record.",
+          "inProperties": true
+        },
+        {
+          "name": "attachment count",
+          "key": "attachmentCount",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The number of attachments. Currently only supported for RTFD documents and emails.",
+          "inProperties": true
+        },
+        {
+          "name": "attributes change date",
+          "key": "attributesChangeDate",
+          "access": "rw",
+          "writable": true,
+          "type": "date",
+          "description": "The change date of the record's attributes.",
+          "inProperties": true
+        },
+        {
+          "name": "bates number",
+          "key": "batesNumber",
+          "access": "rw",
+          "writable": true,
+          "type": "integer",
+          "description": "Bates number.",
+          "inProperties": true
+        },
+        {
+          "name": "cells",
+          "key": "cells",
+          "access": "rw",
+          "writable": true,
+          "type": "array",
+          "description": "The cells of a sheet. This is a list of rows, each row contains a list of string values for the various colums. Read-only in case of revision-proof databases.",
+          "inProperties": false
+        },
+        {
+          "name": "character count",
+          "key": "characterCount",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The character count of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "color",
+          "key": "color",
+          "access": "rw",
+          "writable": true,
+          "type": "RGB color",
+          "description": "The color of a record. Currently only supported by tags &amp; groups.",
+          "inProperties": true
+        },
+        {
+          "name": "columns",
+          "key": "columns",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The column names of a sheet.",
+          "inProperties": false
+        },
+        {
+          "name": "comment",
+          "key": "comment",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The comment of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "content hash",
+          "key": "contentHash",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "Stored SHA1 hash of files and document packages.",
+          "inProperties": true
+        },
+        {
+          "name": "creation date",
+          "key": "creationDate",
+          "access": "rw",
+          "writable": true,
+          "type": "date",
+          "description": "The creation date of a record. Read-only in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "custom meta data",
+          "key": "customMetaData",
+          "access": "rw",
+          "writable": true,
+          "type": "dictionary",
+          "description": "User-defined metadata of a record as a dictionary containing key-value pairs. Setting a value for an unknown key automatically adds a definition to Settings &gt; Data.",
+          "inProperties": true
+        },
+        {
+          "name": "data",
+          "key": "data",
+          "access": "rw",
+          "writable": true,
+          "type": "raw data",
+          "description": "The file data of a record. Currently only supported by PDF documents, images, rich text documents and web archives. Read-only in case of revision-proof databases.",
+          "inProperties": false
+        },
+        {
+          "name": "database",
+          "key": "database",
+          "access": "r",
+          "writable": false,
+          "type": "database",
+          "description": "The database of the record.",
+          "inProperties": true
+        },
+        {
+          "name": "date",
+          "key": "date",
+          "access": "rw",
+          "writable": true,
+          "type": "date",
+          "description": "The (creation/modification) date of a record. Read-only in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "digital object identifier",
+          "key": "digitalObjectIdentifier",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "Digital object identifier (DOI) extracted from text of document, e.g. a scanned receipt, or from the title.",
+          "inProperties": false
+        },
+        {
+          "name": "dimensions",
+          "key": "dimensions",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The width and height of an image or PDF document in pixels or points.",
+          "inProperties": true
+        },
+        {
+          "name": "document amount",
+          "key": "documentAmount",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "Amount extracted from text of document, e.g. a scanned receipt.",
+          "inProperties": false
+        },
+        {
+          "name": "document date",
+          "key": "documentDate",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "First date extracted from text of document, e.g. a scan.",
+          "inProperties": false
+        },
+        {
+          "name": "all document dates",
+          "key": "allDocumentDates",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "All dates extracted from text of document, e.g. a scan.",
+          "inProperties": false
+        },
+        {
+          "name": "document name",
+          "key": "documentName",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "Name based on text or properties of document",
+          "inProperties": false
+        },
+        {
+          "name": "dpi",
+          "key": "dpi",
+          "access": "r",
+          "writable": false,
+          "type": "number",
+          "description": "The resultion of an image in dpi.",
+          "inProperties": true
+        },
+        {
+          "name": "duplicates",
+          "key": "duplicates",
+          "access": "r",
+          "writable": false,
+          "type": "record",
+          "description": "The duplicates of a record (only other instances, not including the record).",
+          "inProperties": true
+        },
+        {
+          "name": "duration",
+          "key": "duration",
+          "access": "r",
+          "writable": false,
+          "type": "real",
+          "description": "The duration of audio and video files.",
+          "inProperties": true
+        },
+        {
+          "name": "encrypted",
+          "key": "encrypted",
+          "access": "r",
+          "writable": false,
+          "type": "boolean",
+          "description": "Specifies if a document is encrypted or not. Currently only supported by PDF documents.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from chat",
+          "key": "excludeFromChat",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude group or record from chat.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from classification",
+          "key": "excludeFromClassification",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude group or record from classifying.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from search",
+          "key": "excludeFromSearch",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude group or record from searching.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from see also",
+          "key": "excludeFromSeeAlso",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude record from see also.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from tagging",
+          "key": "excludeFromTagging",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude group from tagging.",
+          "inProperties": true
+        },
+        {
+          "name": "exclude from Wiki linking",
+          "key": "excludeFromWikiLinking",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "Exclude record from automatic Wiki linking.",
+          "inProperties": true
+        },
+        {
+          "name": "filename",
+          "key": "filename",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The current filename of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "flag",
+          "key": "flag",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "The flag of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "geolocation",
+          "key": "geolocation",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The human readable geogr. location of a record.",
+          "inProperties": false
+        },
+        {
+          "name": "height",
+          "key": "height",
+          "access": "r",
+          "writable": false,
+          "type": "number",
+          "description": "The height of an image or PDF document in pixels or points.",
+          "inProperties": true
+        },
+        {
+          "name": "image",
+          "key": "image",
+          "access": "rw",
+          "writable": true,
+          "type": "any",
+          "description": "The image or PDF document of a record. Setting supports both raw data and strings containing paths or URLs. Read-only in case of revision-proof databases.",
+          "inProperties": false
+        },
+        {
+          "name": "indexed",
+          "key": "indexed",
+          "access": "r",
+          "writable": false,
+          "type": "boolean",
+          "description": "Indexed or imported record.",
+          "inProperties": true
+        },
+        {
+          "name": "international standard book number",
+          "key": "internationalStandardBookNumber",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "International standard book number (ISBN) extracted from text of document, e.g. a scanned receipt, or from the title.",
+          "inProperties": false
+        },
+        {
+          "name": "interval",
+          "key": "interval",
+          "access": "rw",
+          "writable": true,
+          "type": "real",
+          "description": "Refresh interval of a feed. Currently overriden by settings.",
+          "inProperties": true
+        },
+        {
+          "name": "kind",
+          "key": "kind",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The human readable and localized kind of a record. WARNING: Don't use this to check the type of a record, otherwise your script might fail depending on the version and the localization.",
+          "inProperties": true
+        },
+        {
+          "name": "label",
+          "key": "label",
+          "access": "rw",
+          "writable": true,
+          "type": "integer",
+          "description": "Index of label (0-7) of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "language",
+          "key": "language",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "ISO code, e.g. 'en' or 'de', of language of document.",
+          "inProperties": true
+        },
+        {
+          "name": "latitude",
+          "key": "latitude",
+          "access": "rw",
+          "writable": true,
+          "type": "real",
+          "description": "The latitude in degrees of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "location",
+          "key": "location",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The primary location of the record in the database as a POSIX path (/ in names is replaced with \\/).",
+          "inProperties": true
+        },
+        {
+          "name": "location group",
+          "key": "locationGroup",
+          "access": "r",
+          "writable": false,
+          "type": "parent",
+          "description": "The group of the record's primary location. This is identical to the first parent group.",
+          "inProperties": true
+        },
+        {
+          "name": "location with name",
+          "key": "locationWithName",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The full primary location of the record including its name (/ in names is replaced with \\/).",
+          "inProperties": true
+        },
+        {
+          "name": "locking",
+          "key": "locking",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "The locking of a record. Read-only in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "longitude",
+          "key": "longitude",
+          "access": "rw",
+          "writable": true,
+          "type": "real",
+          "description": "The longitude in degrees of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "markdown source",
+          "key": "markdownSource",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The Markdown source of a record if available or the record converted to Markdown if possible.",
+          "inProperties": false
+        },
+        {
+          "name": "meta data",
+          "key": "metaData",
+          "access": "r",
+          "writable": false,
+          "type": "dictionary",
+          "description": "Document metadata (e.g. of PDF &amp; RTF documents, web pages or emails) of a record as a dictionary containing key-value pairs.",
+          "inProperties": true
+        },
+        {
+          "name": "modification date",
+          "key": "modificationDate",
+          "access": "rw",
+          "writable": true,
+          "type": "date",
+          "description": "The modification date of a record. Read-only in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "name",
+          "key": "name",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The name of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "name without date",
+          "key": "nameWithoutDate",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The name of a record without any dates.",
+          "inProperties": true
+        },
+        {
+          "name": "name without extension",
+          "key": "nameWithoutExtension",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The name of a record without a file extension (independent of settings).",
+          "inProperties": true
+        },
+        {
+          "name": "newest document date",
+          "key": "newestDocumentDate",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "Newest date extracted from text of document, e.g. a scan.",
+          "inProperties": false
+        },
+        {
+          "name": "number of duplicates",
+          "key": "numberOfDuplicates",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The number of duplicates of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "number of hits",
+          "key": "numberOfHits",
+          "access": "rw",
+          "writable": true,
+          "type": "integer",
+          "description": "The number of hits of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "number of replicants",
+          "key": "numberOfReplicants",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The number of replicants of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "oldest document date",
+          "key": "oldestDocumentDate",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "Oldest date extracted from text of document, e.g. a scan.",
+          "inProperties": false
+        },
+        {
+          "name": "original name",
+          "key": "originalName",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The original name of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "opening date",
+          "key": "openingDate",
+          "access": "r",
+          "writable": false,
+          "type": "date",
+          "description": "Date when a content was opened the last time or when a feed was refreshed the last time.",
+          "inProperties": true
+        },
+        {
+          "name": "page count",
+          "key": "pageCount",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The page count of a record. Currently only supported by PDF documents.",
+          "inProperties": true
+        },
+        {
+          "name": "paginated PDF",
+          "key": "paginatedPDF",
+          "access": "r",
+          "writable": false,
+          "type": "raw data",
+          "description": "A printed/converted PDF of the record.",
+          "inProperties": false
+        },
+        {
+          "name": "path",
+          "key": "path",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The POSIX file path of a record. Only the path of external records can be changed. Not accessible at all in case of revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "pending",
+          "key": "pending",
+          "access": "r",
+          "writable": false,
+          "type": "boolean",
+          "description": "Flag whether the (latest) contents of a record haven't been downloaded from a sync location yet.",
+          "inProperties": true
+        },
+        {
+          "name": "plain text",
+          "key": "plainText",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The plain text of a record. Read-only in case of revision-proof databases. Setting this property of images, PDF documents, audio or video files sets the searchable, e.g. transcribed, text.",
+          "inProperties": false
+        },
+        {
+          "name": "proposed filename",
+          "key": "proposedFilename",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The proposed filename for a record.",
+          "inProperties": true
+        },
+        {
+          "name": "rating",
+          "key": "rating",
+          "access": "rw",
+          "writable": true,
+          "type": "integer",
+          "description": "Rating (0-5) of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "record type",
+          "key": "recordType",
+          "access": "r",
+          "writable": false,
+          "type": "data type",
+          "description": "The type of a record. WARNING: Don't use string conversions of this type for comparisons, this might fail due to known scripting issues of macOS.",
+          "inProperties": true
+        },
+        {
+          "name": "reference URL",
+          "key": "referenceURL",
+          "access": "r",
+          "writable": false,
+          "type": "text",
+          "description": "The URL (x-devonthink-item://...) to reference/link back to a record.",
+          "inProperties": true
+        },
+        {
+          "name": "reminder",
+          "key": "reminder",
+          "access": "rw",
+          "writable": true,
+          "type": "reminder",
+          "description": "Reminder of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "rich text",
+          "key": "richText",
+          "access": "rw",
+          "writable": true,
+          "type": "rich text",
+          "description": "The rich text of the record (see extended text suite). Changes are only supported in case of RTF/RTFD documents and not by revision-proof databases.",
+          "inProperties": false
+        },
+        {
+          "name": "score",
+          "key": "score",
+          "access": "r",
+          "writable": false,
+          "type": "real",
+          "description": "The score of the last comparison, classification or search (value between 0.0 and 1.0) or undefined otherwise.",
+          "inProperties": true
+        },
+        {
+          "name": "size",
+          "key": "size",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The size of a record in bytes.",
+          "inProperties": true
+        },
+        {
+          "name": "source",
+          "key": "source",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The HTML/XML source of a record if available or the record converted to HTML if possible. Read-only in case of revision-proof databases.",
+          "inProperties": false
+        },
+        {
+          "name": "tag type",
+          "key": "tagType",
+          "access": "r",
+          "writable": false,
+          "type": "tag type",
+          "description": "The tag type of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "tags",
+          "key": "tags",
+          "access": "rw",
+          "writable": true,
+          "type": "array",
+          "description": "The tags of a record. Setting accepts both strings and parents.",
+          "inProperties": true
+        },
+        {
+          "name": "thumbnail",
+          "key": "thumbnail",
+          "access": "rw",
+          "writable": true,
+          "type": "any",
+          "description": "The thumbnail of a record. Setting supports both raw data and strings containing paths or URLs.",
+          "inProperties": false
+        },
+        {
+          "name": "unlinked Wiki links",
+          "key": "unlinkedWikiLinks",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "List of Wiki links not yet referencing an item in the database. NOTE: This list depends on the Wiki linking settings.",
+          "inProperties": false
+        },
+        {
+          "name": "unread",
+          "key": "unread",
+          "access": "rw",
+          "writable": true,
+          "type": "boolean",
+          "description": "The unread flag of a record.",
+          "inProperties": true
+        },
+        {
+          "name": "URL",
+          "key": "url",
+          "access": "rw",
+          "writable": true,
+          "type": "text",
+          "description": "The URL of a record. Read-only in case of bookmarks in revision-proof databases.",
+          "inProperties": true
+        },
+        {
+          "name": "web archive",
+          "key": "webArchive",
+          "access": "r",
+          "writable": false,
+          "type": "raw data",
+          "description": "The web archive of a record if available or the record converted to web archive if possible.",
+          "inProperties": false
+        },
+        {
+          "name": "width",
+          "key": "width",
+          "access": "r",
+          "writable": false,
+          "type": "number",
+          "description": "The width of an image or PDF document in pixels or points.",
+          "inProperties": true
+        },
+        {
+          "name": "word count",
+          "key": "wordCount",
+          "access": "r",
+          "writable": false,
+          "type": "integer",
+          "description": "The word count of a record.",
+          "inProperties": true
+        }
+      ]
     },
     "record": {
       "scriptClass": "record",
@@ -2148,7 +2973,7 @@
           "writable": true,
           "type": "text",
           "description": "List of Wiki links not yet referencing an item in the database. NOTE: This list depends on the Wiki linking settings.",
-          "inProperties": true
+          "inProperties": false
         },
         {
           "name": "unread",

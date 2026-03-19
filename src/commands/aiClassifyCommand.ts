@@ -1,5 +1,9 @@
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  parseArgs
+} from "../utils/args.js";
 import { buildContainerRef, buildRecordRef } from "../utils/locators.js";
 import { ensureNoPositionals, renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -28,6 +32,7 @@ export class AiClassifyCommand implements CommandModule<DevonthinkCommandInput> 
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "db"]);
+    assertNoMissingOptionValues(parsed, ["uuid", "db"]);
     ensureNoPositionals(parsed, "ai:classify");
 
     const record = buildRecordRef(parsed, "uuid", { required: true })!;

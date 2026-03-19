@@ -1,8 +1,17 @@
 import { ValidationError } from "../application/errors.js";
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, getOption, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  getOption,
+  parseArgs
+} from "../utils/args.js";
 import { buildContainerRef } from "../utils/locators.js";
-import { ensureNoPositionals, renderJson } from "./helpers.js";
+import {
+  ensureExclusiveRecordLocator,
+  ensureNoPositionals,
+  renderJson
+} from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
 
 export class RecordGetCommand implements CommandModule<DevonthinkCommandInput> {
@@ -32,11 +41,13 @@ export class RecordGetCommand implements CommandModule<DevonthinkCommandInput> {
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "db", "at"]);
+    assertNoMissingOptionValues(parsed, ["uuid", "db", "at"]);
     ensureNoPositionals(parsed, "get");
 
     const uuid = getOption(parsed, "uuid");
     const db = getOption(parsed, "db");
     const at = getOption(parsed, "at");
+    ensureExclusiveRecordLocator(uuid, db, at, "get");
 
     if (uuid) {
       return {
@@ -59,6 +70,10 @@ export class RecordGetCommand implements CommandModule<DevonthinkCommandInput> {
 
     if (db) {
       throw new ValidationError("get with --db requires --at.");
+    }
+
+    if (at) {
+      throw new ValidationError("get with --at requires --db.");
     }
 
     throw new ValidationError("get requires --uuid or --db with --at.");

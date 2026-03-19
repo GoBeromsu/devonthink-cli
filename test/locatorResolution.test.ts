@@ -47,4 +47,12 @@ describe("locator resolution helpers", () => {
       identifier: "Inbox"
     });
   });
+
+  it("rejects conflicting record locators", () => {
+    expect(() =>
+      recordSelectorFromUuidOrPath(
+        parseArgs(["--uuid", "record-1", "--database", "01. Personal", "--at", "/Projects"])
+      )
+    ).toThrow("Record locator accepts either --uuid or --database with --at, not both.");
+  });
 });

@@ -323,23 +323,17 @@ function serializeEntity(entity, propertyRequest, schemaObjects) {
     return typeof entity.properties === "function" ? entity.properties() : null;
   }, null);
 
-  if (bag && typeof bag === "object") {
-    propertySpecs.forEach(function (spec) {
-      if (Object.prototype.hasOwnProperty.call(bag, spec.key)) {
-        result[spec.name] = serializeNestedValue(bag[spec.key], schemaObjects);
-      }
-    });
-  }
-
-  if (Object.keys(result).length > 0) {
-    return result;
-  }
-
   propertySpecs
-    .filter(function (spec) {
-      return spec.inProperties !== false;
-    })
     .forEach(function (spec) {
+      if (bag && typeof bag === "object" && Object.prototype.hasOwnProperty.call(bag, spec.key)) {
+        result[spec.name] = serializeNestedValue(bag[spec.key], schemaObjects);
+        return;
+      }
+
+      if (spec.inProperties === false) {
+        return;
+      }
+
       var value = readProperty(entity, spec);
       if (value !== undefined) {
         result[spec.name] = serializeNestedValue(value, schemaObjects);
@@ -368,10 +362,30 @@ function serializeCommandResult(value, schemaObjects) {
 
   var kind = detectObjectKind(value);
   if (kind) {
-    return serializeReference(value, kind, schemaObjects);
+    return serializeCommandEntity(value, kind, schemaObjects);
   }
 
   return serializeNestedValue(value, schemaObjects);
+}
+
+function serializeCommandEntity(entity, kind, schemaObjects) {
+  var propertyRequest = defaultPropertyRequestForKind(kind, schemaObjects);
+  if (!propertyRequest) {
+    return serializeReference(entity, kind, schemaObjects);
+  }
+
+  return serializeEntity(entity, propertyRequest, schemaObjects);
+}
+
+function defaultPropertyRequestForKind(kind, schemaObjects) {
+  if (!schemaObjects || !schemaObjects[kind] || !schemaObjects[kind].properties) {
+    return null;
+  }
+
+  return {
+    propertySpecs: schemaObjects[kind].properties,
+    selectedProperties: null
+  };
 }
 
 function serializeNestedValue(value, schemaObjects) {

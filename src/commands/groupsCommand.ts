@@ -1,4 +1,9 @@
-import { assertNoUnknownOptions, getOption, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  getOption,
+  parseArgs
+} from "../utils/args.js";
 import { ValidationError } from "../application/errors.js";
 import { renderJson, validateProperties } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -33,10 +38,15 @@ export class GroupsCommand implements CommandModule<GroupsInput> {
   parse(argv: string[], context?: CommandContext): GroupsInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["db", "property"]);
+    assertNoMissingOptionValues(parsed, ["db", "property"]);
 
     const db = getOption(parsed, "db");
     if (!db) {
       throw new ValidationError("groups requires --db.");
+    }
+
+    if (parsed.positionals.length > 1) {
+      throw new ValidationError("groups accepts at most one path.");
     }
 
     const at = parsed.positionals[0];

@@ -1,4 +1,8 @@
-import { assertNoUnknownOptions, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  parseArgs
+} from "../utils/args.js";
 import { renderJson, validateProperties } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
 
@@ -29,6 +33,7 @@ export class DatabasesCommand implements CommandModule<DatabasesInput> {
   parse(argv: string[], context?: CommandContext): DatabasesInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["property"]);
+    assertNoMissingOptionValues(parsed, ["property"]);
 
     const properties = context
       ? validateProperties(context.schema, "database", parsed.options.get("property") ?? [])

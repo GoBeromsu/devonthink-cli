@@ -20,7 +20,7 @@ describe("inbox database model executable spec", () => {
         name: "Inbox",
         uuid: "group-root-inbox",
         location: "/",
-        path: null,
+        path: "",
         "record type": "group"
       }
     });

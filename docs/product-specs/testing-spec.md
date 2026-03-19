@@ -7,9 +7,11 @@
 Scenario tests under `test/spec/` define the public contract:
 
 - `project_ingest.spec.ts`
+- `organization_workflows.spec.ts`
 - `inbox_database_model.spec.ts`
 - `record_property_access.spec.ts`
 - `lookup_and_search.spec.ts`
+- `validation_guards.spec.ts`
 
 These tests should:
 

@@ -1,6 +1,10 @@
 import { ValidationError } from "../application/errors.js";
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  parseArgs
+} from "../utils/args.js";
 import { buildGroupRef } from "../utils/locators.js";
 import { renderJson } from "./helpers.js";
 import { parseJsonObject } from "../utils/values.js";
@@ -29,6 +33,7 @@ export class CreateRecordCommand implements CommandModule<DevonthinkCommandInput
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["db", "at"]);
+    assertNoMissingOptionValues(parsed, ["db", "at"]);
 
     const json = parsed.positionals[0];
     if (!json) {
@@ -39,6 +44,12 @@ export class CreateRecordCommand implements CommandModule<DevonthinkCommandInput
     }
 
     const properties = parseJsonObject(json, "record properties");
+    if (!Object.prototype.hasOwnProperty.call(properties, "type")
+      && !Object.prototype.hasOwnProperty.call(properties, "record type")) {
+      throw new ValidationError(
+        "create:record requires 'type' or 'record type' in the JSON."
+      );
+    }
     const inRef = buildGroupRef(parsed, "db", "at");
     const parameters: Record<string, PropertyValue> = {};
     if (inRef) parameters.in = inRef;

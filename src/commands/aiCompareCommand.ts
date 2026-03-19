@@ -1,6 +1,11 @@
 import { ValidationError } from "../application/errors.js";
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, getOption, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  getOption,
+  parseArgs
+} from "../utils/args.js";
 import { buildRecordRef } from "../utils/locators.js";
 import { ensureNoPositionals, renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -29,6 +34,7 @@ export class AiCompareCommand implements CommandModule<DevonthinkCommandInput> {
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "content"]);
+    assertNoMissingOptionValues(parsed, ["uuid", "content"]);
     ensureNoPositionals(parsed, "ai:compare");
 
     const record = buildRecordRef(parsed, "uuid");

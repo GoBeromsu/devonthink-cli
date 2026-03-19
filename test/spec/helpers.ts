@@ -63,8 +63,10 @@ interface GroupEntity {
   databaseId: string;
   dtPath: string;
   location: string;
+  path: string;
   comment: string | null;
   color: JsonValue;
+  indexed: boolean;
 }
 
 interface RecordEntity {
@@ -144,8 +146,10 @@ export class FakeDevonthinkPort implements DevonthinkPort {
           databaseId: "db-personal",
           dtPath: "/",
           location: "/",
+          path: "",
           comment: null,
-          color: null
+          color: null,
+          indexed: false
         },
         {
           id: inboxRoot,
@@ -154,8 +158,10 @@ export class FakeDevonthinkPort implements DevonthinkPort {
           databaseId: "db-inbox",
           dtPath: "/",
           location: "/",
+          path: "",
           comment: null,
-          color: null
+          color: null,
+          indexed: false
         },
         {
           id: projects,
@@ -164,8 +170,10 @@ export class FakeDevonthinkPort implements DevonthinkPort {
           databaseId: "db-personal",
           dtPath: "/Projects",
           location: "/",
+          path: "",
           comment: "Active projects",
-          color: null
+          color: null,
+          indexed: false
         },
         {
           id: projectsInbox,
@@ -174,8 +182,10 @@ export class FakeDevonthinkPort implements DevonthinkPort {
           databaseId: "db-personal",
           dtPath: "/Projects/Inbox",
           location: "/Projects",
+          path: "",
           comment: null,
-          color: null
+          color: null,
+          indexed: false
         },
         {
           id: archive,
@@ -184,8 +194,10 @@ export class FakeDevonthinkPort implements DevonthinkPort {
           databaseId: "db-personal",
           dtPath: "/Projects/Archive",
           location: "/Projects",
+          path: "",
           comment: null,
-          color: null
+          color: null,
+          indexed: false
         }
       ],
       records: [
@@ -360,11 +372,24 @@ export class FakeDevonthinkPort implements DevonthinkPort {
     );
     const source = String(input.directValue ?? "");
     const requestedName = asString(input.parameters?.name);
-    const name = requestedName ?? basename(source);
+    const name = requestedName ?? defaultRecordName(source);
+    if (isDirectoryPath(source)) {
+      const group = this.ensureGroupPath(
+        destination.databaseId,
+        joinLocation(destination.dtPath, basename(source))
+      );
+      group.path = input.commandName === "index path" ? source.replace(/\/+$/u, "") : "";
+      group.indexed = input.commandName === "index path";
+      return this.groupValue(group);
+    }
+
     const record = this.createRecord(destination.databaseId, destination.dtPath, {
       name,
       recordType: input.commandName === "index path" ? "indexed" : "PDF document",
-      path: source
+      path:
+        input.commandName === "index path"
+          ? source
+          : this.importedPath(destination.databaseId, basename(source))
     });
     return this.recordValue(record);
   }
@@ -427,7 +452,20 @@ export class FakeDevonthinkPort implements DevonthinkPort {
 
   private lookupRecordsWithPath(input: DevonthinkCommandInput): JsonValue {
     const needle = String(input.directValue ?? "");
-    return this.lookupInDatabase(input.parameters?.in, (record) => record.path === needle);
+    const database = input.parameters?.in
+      ? this.resolveDatabaseReference(input.parameters.in as PropertyValue)
+      : undefined;
+
+    const records = this.state.records
+      .filter((record) => (database ? record.databaseId === database.id : true))
+      .filter((record) => record.path === needle)
+      .map((record) => this.recordValue(record));
+    const groups = this.state.groups
+      .filter((group) => (database ? group.databaseId === database.id : true))
+      .filter((group) => group.path === needle)
+      .map((group) => this.groupValue(group));
+
+    return [...records, ...groups];
   }
 
   private lookupRecordsWithTags(input: DevonthinkCommandInput): JsonValue {
@@ -452,17 +490,45 @@ export class FakeDevonthinkPort implements DevonthinkPort {
   private moveRecords(input: DevonthinkCommandInput): JsonValue {
     const records = this.resolveRecordInputs(input.parameters?.record);
     const destination = this.resolveGroupReference(input.parameters?.to as PropertyValue);
-    records.forEach((record) => {
+    const source = input.parameters?.from
+      ? this.resolveGroupReference(input.parameters.from as PropertyValue)
+      : undefined;
+    const targets = source
+      ? records.filter(
+        (record) =>
+          record.databaseId === source.databaseId && record.location === source.dtPath
+      )
+      : records;
+
+    if (targets.length === 0) {
+      throw new Error("Record not found in source group.");
+    }
+
+    targets.forEach((record) => {
       record.databaseId = destination.databaseId;
       record.location = destination.dtPath;
       record.dtPath = joinLocation(destination.dtPath, record.name);
     });
-    return records.map((record) => this.recordValue(record));
+    return targets.map((record) => this.recordValue(record));
   }
 
   private deleteRecords(input: DevonthinkCommandInput): JsonValue {
     const records = this.resolveRecordInputs(input.parameters?.record);
-    for (const record of records) {
+    const source = input.parameters?.in
+      ? this.resolveGroupReference(input.parameters.in as PropertyValue)
+      : undefined;
+    const targets = source
+      ? records.filter(
+        (record) =>
+          record.databaseId === source.databaseId && record.location === source.dtPath
+      )
+      : records;
+
+    if (targets.length === 0) {
+      throw new Error("Record not found in source group.");
+    }
+
+    for (const record of targets) {
       this.state.records = this.state.records.filter((candidate) => candidate.id !== record.id);
     }
     return true;
@@ -474,6 +540,7 @@ export class FakeDevonthinkPort implements DevonthinkPort {
     return records.map((record) =>
       this.recordValue(
         this.createRecord(destination.databaseId, destination.dtPath, {
+          uuid: input.commandName === "replicate" ? record.uuid : undefined,
           name: record.name,
           recordType: record.recordType,
           path: record.path,
@@ -607,6 +674,14 @@ export class FakeDevonthinkPort implements DevonthinkPort {
       throw new Error("Expected record reference.");
     }
 
+    if (value.locator.uuid) {
+      const records = this.state.records.filter((candidate) => candidate.uuid === value.locator.uuid);
+      if (records.length === 0) {
+        throw new Error("Record not found.");
+      }
+      return records;
+    }
+
     return [this.resolveRecordSelector(value.locator)];
   }
 
@@ -696,6 +771,7 @@ export class FakeDevonthinkPort implements DevonthinkPort {
     databaseId: string,
     location: string,
     input: {
+      uuid?: string;
       name: string;
       recordType: string;
       path?: string | null;
@@ -709,7 +785,7 @@ export class FakeDevonthinkPort implements DevonthinkPort {
     const record = {
       id: `record-${index}`,
       name: input.name,
-      uuid: `record-created-${index}`,
+      uuid: input.uuid ?? `record-created-${index}`,
       databaseId,
       dtPath: joinLocation(location, input.name),
       location,
@@ -755,8 +831,10 @@ export class FakeDevonthinkPort implements DevonthinkPort {
         databaseId,
         dtPath: nextPath,
         location: currentPath,
+        path: "",
         comment: null,
-        color: null
+        color: null,
+        indexed: false
       };
       this.state.groups.push(created);
       currentGroup = created;
@@ -784,9 +862,10 @@ export class FakeDevonthinkPort implements DevonthinkPort {
       name: group.name,
       uuid: group.uuid,
       location: group.location,
-      path: null,
+      path: group.path,
       comment: group.comment,
       color: group.color,
+      indexed: group.indexed,
       "record type": "group",
       database: this.databaseRef(this.requireDatabase({ identifier: group.databaseId }))
     };
@@ -820,9 +899,14 @@ export class FakeDevonthinkPort implements DevonthinkPort {
       name: group.name,
       uuid: group.uuid,
       location: group.location,
-      path: null,
+      path: group.path,
       "record type": "group"
     };
+  }
+
+  private importedPath(databaseId: string, name: string): string {
+    const database = this.requireDatabase({ identifier: databaseId });
+    return `${database.path}/Files.noindex/${name}`;
   }
 }
 
@@ -915,6 +999,15 @@ function basename(value: string): string {
   const normalized = value.replace(/\/+$/u, "");
   const parts = normalized.split("/");
   return parts[parts.length - 1] || value;
+}
+
+function defaultRecordName(value: string): string {
+  const base = basename(value);
+  return base.replace(/\.[^.]+$/u, "");
+}
+
+function isDirectoryPath(value: string): boolean {
+  return /\/$/u.test(value);
 }
 
 function joinLocation(basePath: string, name: string): string {

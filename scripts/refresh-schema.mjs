@@ -37,6 +37,7 @@ const ENUM_NAMES = [
 
 const rawXml = execFileSync("sdef", [APP_PATH], { encoding: "utf8" });
 const xml = rawXml.replace(/<!--[\s\S]*?-->/gu, "");
+const classCache = new Map();
 
 const schema = {
   generatedAt: new Date().toISOString(),
@@ -77,9 +78,41 @@ function parseCommand(name) {
   };
 }
 
-function parseClass(name) {
+function parseClass(name, stack = new Set()) {
+  if (classCache.has(name)) {
+    return classCache.get(name);
+  }
+
+  if (stack.has(name)) {
+    return {
+      scriptClass: name,
+      properties: []
+    };
+  }
+
   const blocks = findBlocks("class", name);
-  const properties = dedupeProperties(
+  const nextStack = new Set(stack);
+  nextStack.add(name);
+  const ownProperties = parseOwnProperties(blocks);
+  const inheritedProperties = dedupeProperties(
+    blocks
+      .map((block) => extractAttribute(block.attributes, "inherits"))
+      .filter(Boolean)
+      .flatMap((inheritedName) => parseClass(inheritedName, nextStack).properties)
+  );
+  const properties = dedupeProperties([...ownProperties, ...inheritedProperties]);
+
+  const parsed = {
+    scriptClass: name,
+    properties
+  };
+
+  classCache.set(name, parsed);
+  return parsed;
+}
+
+function parseOwnProperties(blocks) {
+  return dedupeProperties(
     blocks.flatMap((block) =>
       [...block.body.matchAll(/<property name="([^"]+)"([^>]*)>([\s\S]*?)<\/property>/gu)].map(
         (match) => {
@@ -99,11 +132,6 @@ function parseClass(name) {
       )
     )
   );
-
-  return {
-    scriptClass: name,
-    properties
-  };
 }
 
 function parseEnum(name) {

@@ -1,5 +1,9 @@
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  parseArgs
+} from "../utils/args.js";
 import { buildGroupRef, buildRecordRef } from "../utils/locators.js";
 import { ensureNoPositionals, renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -29,10 +33,11 @@ export class DeleteCommand implements CommandModule<DevonthinkCommandInput> {
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "from-db", "from"]);
+    assertNoMissingOptionValues(parsed, ["uuid", "from-db", "from"]);
     ensureNoPositionals(parsed, "delete");
 
     const record = buildRecordRef(parsed, "uuid", { required: true })!;
-    const from = buildGroupRef(parsed, "from-db", "from");
+    const from = buildGroupRef(parsed, "from-db", "from", { requireAt: true });
     const parameters: Record<string, PropertyValue> = { record };
     if (from) parameters.in = from;
 

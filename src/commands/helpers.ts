@@ -26,6 +26,19 @@ export function ensureNoPositionals(parsed: ParsedArgs, label: string): void {
   }
 }
 
+export function ensureExclusiveRecordLocator(
+  uuid: string | undefined,
+  db: string | undefined,
+  at: string | undefined,
+  label: string
+): void {
+  if (uuid && (db || at)) {
+    throw new ValidationError(
+      `${label} accepts either --uuid or --db with --at, not both.`
+    );
+  }
+}
+
 export function validateProperties(
   schema: DevonthinkSchema,
   kind: SchemaObjectKind,

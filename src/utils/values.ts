@@ -72,7 +72,15 @@ function coerceAssignmentValue(raw: string, property?: SchemaProperty): JsonValu
       .filter(Boolean);
   }
 
+  if (property && isStringLikeProperty(property)) {
+    return raw;
+  }
+
   return coerceCliValue(raw);
+}
+
+function isStringLikeProperty(property: SchemaProperty): boolean {
+  return property.type === "text" || property.type === "content" || property.type === "rich text";
 }
 
 function isPlainObject(value: JsonValue): value is Record<string, JsonValue> {

@@ -1,7 +1,16 @@
 import { ValidationError } from "../application/errors.js";
 import type { SchemaObjectKind } from "../application/types.js";
-import { assertNoUnknownOptions, getOption, parseArgs } from "../utils/args.js";
-import { renderJson, validateProperties } from "./helpers.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  getOption,
+  parseArgs
+} from "../utils/args.js";
+import {
+  ensureExclusiveRecordLocator,
+  renderJson,
+  validateProperties
+} from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
 
 type EntityMode = "application" | "database" | "group" | "record";
@@ -43,10 +52,12 @@ export class PropertyReadCommand implements CommandModule<PropertyReadInput> {
   parse(argv: string[], context?: CommandContext): PropertyReadInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "db", "at"]);
+    assertNoMissingOptionValues(parsed, ["uuid", "db", "at"]);
 
     const uuid = getOption(parsed, "uuid");
     const db = getOption(parsed, "db");
     const at = getOption(parsed, "at");
+    ensureExclusiveRecordLocator(uuid, db, at, "property:read");
 
     const mode = resolveMode(uuid, db, at);
     const kind: SchemaObjectKind = mode;

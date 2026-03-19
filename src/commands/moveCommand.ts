@@ -1,5 +1,9 @@
 import type { DevonthinkCommandInput, PropertyValue } from "../application/types.js";
-import { assertNoUnknownOptions, parseArgs } from "../utils/args.js";
+import {
+  assertNoMissingOptionValues,
+  assertNoUnknownOptions,
+  parseArgs
+} from "../utils/args.js";
 import { buildGroupRef, buildRecordRef } from "../utils/locators.js";
 import { ensureNoPositionals, renderJson } from "./helpers.js";
 import type { CommandContext, CommandModule } from "./types.js";
@@ -31,11 +35,12 @@ export class MoveCommand implements CommandModule<DevonthinkCommandInput> {
   parse(argv: string[]): DevonthinkCommandInput {
     const parsed = parseArgs(argv);
     assertNoUnknownOptions(parsed, ["uuid", "to-db", "to", "from-db", "from"]);
+    assertNoMissingOptionValues(parsed, ["uuid", "to-db", "to", "from-db", "from"]);
     ensureNoPositionals(parsed, "move");
 
     const record = buildRecordRef(parsed, "uuid", { required: true })!;
-    const to = buildGroupRef(parsed, "to-db", "to", { required: true })!;
-    const from = buildGroupRef(parsed, "from-db", "from");
+    const to = buildGroupRef(parsed, "to-db", "to", { required: true, requireAt: true })!;
+    const from = buildGroupRef(parsed, "from-db", "from", { requireAt: true });
     const parameters: Record<string, PropertyValue> = { record, to };
     if (from) parameters.from = from;
 

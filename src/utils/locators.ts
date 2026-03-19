@@ -16,7 +16,7 @@ export function buildGroupRef(
   parsed: ParsedArgs,
   dbOption: string,
   atOption: string,
-  options?: { required?: boolean }
+  options?: { required?: boolean; requireAt?: boolean }
 ): GroupReference | undefined {
   const db = getOption(parsed, dbOption);
   const at = getOption(parsed, atOption);
@@ -30,6 +30,10 @@ export function buildGroupRef(
 
   if (!db) {
     throw new ValidationError(`Missing required option: --${dbOption}.`);
+  }
+
+  if (options?.requireAt && !at) {
+    throw new ValidationError(`Missing required option: --${atOption}.`);
   }
 
   return {
@@ -145,6 +149,12 @@ export function recordSelectorFromUuidOrPath(parsed: ParsedArgs): RecordSelector
   const database = getOption(parsed, "database");
   const at = getOption(parsed, "at");
 
+  if (uuid && (database || at)) {
+    throw new ValidationError(
+      "Record locator accepts either --uuid or --database with --at, not both."
+    );
+  }
+
   if (uuid) {
     return {
       uuid,
@@ -165,4 +175,3 @@ export function recordSelectorFromUuidOrPath(parsed: ParsedArgs): RecordSelector
 
   throw new ValidationError("Record locator requires --uuid or --database with --at.");
 }
-

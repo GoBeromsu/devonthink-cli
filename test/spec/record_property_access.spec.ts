@@ -35,4 +35,39 @@ describe("record property access executable spec", () => {
       })
     );
   });
+
+  it("reads and updates group properties through the same schema-backed contract", async () => {
+    const initial = await runCli([
+      "property:read",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects",
+      "name",
+      "comment"
+    ]);
+
+    expect(initial.code).toBe(0);
+    expect(parseJsonOutput(initial.stdout)).toEqual({
+      name: "Projects",
+      comment: "Active projects"
+    });
+
+    const updated = await runCli([
+      "property:set",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects",
+      "comment=Focus area"
+    ], initial.port);
+
+    expect(updated.code).toBe(0);
+    expect(parseJsonOutput(updated.stdout)).toEqual(
+      expect.objectContaining({
+        name: "Projects",
+        comment: "Focus area"
+      })
+    );
+  });
 });
