@@ -73,9 +73,19 @@ Every command targets a DEVONthink entity through a locator:
 | Locator | Target |
 |---|---|
 | `--uuid <uuid>` | Record by UUID or item link |
-| `--db <name> --at <path>` | Group or record at a specific path |
+| `--db <name> --at <path>` | Record or group at a specific path |
 | `--db <name>` | Database itself |
 | _(none)_ | Application |
+
+All record commands (`get`, `move`, `delete`, `duplicate`, `replicate`) accept **either** `--uuid` or `--db --at`. You never need to look up a UUID first:
+
+```bash
+# Move by path (no UUID needed)
+dt move --db "01. Personal" --at "/Inbox/Report.pdf" --to-db "01. Personal" --to "/Projects"
+
+# Delete by path
+dt delete --db "01. Personal" --at "/Projects/Stale"
+```
 
 Destination and source use prefixed options:
 
@@ -94,12 +104,12 @@ DEVONthink paths follow the scripting dictionary syntax: root-based (`"/Projects
 |---|---|
 | `dt add <path>` | Import a file or folder |
 | `dt databases` | List open databases |
-| `dt delete --uuid X` | Delete a record |
-| `dt duplicate --uuid X --to-db X --to /Y` | Duplicate a record |
-| `dt get --uuid X` | Get a record by UUID or path |
+| `dt delete` | Delete a record (`--uuid` or `--db --at`) |
+| `dt duplicate` | Duplicate a record (`--uuid` or `--db --at`) |
+| `dt get` | Get a record by UUID or path |
 | `dt groups --db X [/path]` | List child groups |
-| `dt move --uuid X --to-db X --to /Y` | Move a record |
-| `dt replicate --uuid X --to-db X --to /Y` | Replicate a record |
+| `dt move` | Move a record (`--uuid` or `--db --at`) |
+| `dt replicate` | Replicate a record (`--uuid` or `--db --at`) |
 | `dt search "query" [--db X]` | Search for records |
 
 ### Property
@@ -179,8 +189,7 @@ dt property:set --db "01. Personal" --at "/Projects/OldName" name=NewName
 ### Delete a group
 
 ```bash
-dt get --db "01. Personal" --at "/Projects/Stale"
-dt delete --uuid "<group-uuid>"
+dt delete --db "01. Personal" --at "/Projects/Stale"
 ```
 
 ### Classify and compare with DEVONthink AI
@@ -199,7 +208,7 @@ dt ai:compare --uuid "<record-uuid>"
 ```bash
 pnpm install
 pnpm check          # TypeScript + doc validation
-pnpm test           # 26 spec tests (fake harness)
+pnpm test           # 32 spec tests (fake harness)
 pnpm test:smoke     # 17 live tests (requires DEVONthink + dt-cli-smoke database)
 pnpm build
 pnpm pack:check     # Package integrity
