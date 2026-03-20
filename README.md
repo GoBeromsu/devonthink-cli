@@ -1,85 +1,64 @@
 # DEVONthink CLI
 
-Pure CLI wrapper for the DEVONthink scripting dictionary.
+Control DEVONthink from the command line. `devonthink-cli` exposes DEVONthink's scripting dictionary through shell-friendly verbs, JSON output, and a consistent locator grammar.
 
-`devonthink-cli` does not add a workflow layer on top of DEVONthink. It exposes DEVONthink's own scripting model through a shell-friendly, task-oriented command surface:
+```bash
+# List databases
+dt databases
 
-- intuitive top-level verbs (`add`, `delete`, `move`, `get`, `search`)
-- noun plurals for listing (`databases`, `groups`)
-- colon-namespaced grouping (`property:read`, `lookup:tags`, `ai:classify`)
-- JSON output by default
+# Import a file into a specific group
+dt add ~/Downloads/paper.pdf --db "01. Personal" --at "/Projects"
 
-Repository-local maintainer docs:
-
-- [AGENTS.md](AGENTS.md)
-- [docs/index.md](docs/index.md)
-- [ARCHITECTURE.md](ARCHITECTURE.md)
+# Search across a database
+dt search "tags:reference" --db "01. Personal"
+```
 
 ## Requirements
 
-- macOS
-- DEVONthink 4.x installed at `/Applications/DEVONthink.app`
+- macOS with DEVONthink 4.x
 - Node.js 20+
 
 ## Install
-
-From npm:
 
 ```bash
 npm install -g devonthink-cli
 ```
 
-From source:
-
-```bash
-pnpm install
-pnpm build
-pnpm link --global
-```
-
-## Quickstart
-
-List open databases:
+Verify the installation:
 
 ```bash
 dt databases
 ```
 
-Inspect DEVONthink's global Inbox model:
+This prints a JSON array of open DEVONthink databases. If DEVONthink is not running, the command exits with an error.
 
-```bash
-dt property:read inbox "incoming group"
-```
+## Quickstart
 
-List child groups under a location:
+List child groups inside a database:
 
 ```bash
 dt groups --db "01. Personal" /Projects
 ```
 
-Read selected properties from a record:
+Read properties from a record:
 
 ```bash
 dt property:read --uuid "<record-uuid>" name tags comment
 ```
 
-Set writable record properties:
+Set writable properties:
 
 ```bash
 dt property:set --uuid "<record-uuid>" comment=Reviewed tags=project,reading
 ```
 
-Run native DEVONthink search:
-
-```bash
-dt search "tags:reference" --db "01. Personal"
-```
-
-Import a local file:
+Import a file:
 
 ```bash
 dt add ~/Downloads/paper.pdf --db "01. Personal" --at "/Projects"
 ```
+
+The command prints the imported record as JSON, including its `uuid` and `path`.
 
 Move a record to another group:
 
@@ -87,26 +66,27 @@ Move a record to another group:
 dt move --uuid "<record-uuid>" --to-db "01. Personal" --to "/Projects/Archive"
 ```
 
-## CLI Model
+## Locator Model
 
-Locators determine which entity you are addressing:
+Every command targets a DEVONthink entity through a locator:
 
-- `--uuid <uuid>` — record (by UUID or item link)
-- `--db <name|uuid> --at <path>` — group or record at a specific location
-- `--db <name|uuid>` — database itself
-- _(no locator)_ — application
+| Locator | Target |
+|---|---|
+| `--uuid <uuid>` | Record by UUID or item link |
+| `--db <name> --at <path>` | Group or record at a specific path |
+| `--db <name>` | Database itself |
+| _(none)_ | Application |
 
-Destination/source containers use prefixed options:
+Destination and source use prefixed options:
 
-- `--to-db <name|uuid> --to <path>` — destination group
-- `--from-db <name|uuid> --from <path>` — source group
+| Option | Purpose |
+|---|---|
+| `--to-db <name> --to <path>` | Destination group |
+| `--from-db <name> --from <path>` | Source group |
 
-DEVONthink paths use the same location syntax as the scripting dictionary:
+DEVONthink paths follow the scripting dictionary syntax: root-based (`"/Projects/Inbox"`), with literal `/` in names escaped as `\/`.
 
-- root-based: `"/Projects/Inbox"`
-- literal `/` in names must be escaped as `\/`
-
-## Command Surface
+## Commands
 
 ### Core
 
@@ -117,7 +97,7 @@ DEVONthink paths use the same location syntax as the scripting dictionary:
 | `dt delete --uuid X` | Delete a record |
 | `dt duplicate --uuid X --to-db X --to /Y` | Duplicate a record |
 | `dt get --uuid X` | Get a record by UUID or path |
-| `dt groups --db X [/path]` | List child groups in a database |
+| `dt groups --db X [/path]` | List child groups |
 | `dt move --uuid X --to-db X --to /Y` | Move a record |
 | `dt replicate --uuid X --to-db X --to /Y` | Replicate a record |
 | `dt search "query" [--db X]` | Search for records |
@@ -133,8 +113,8 @@ DEVONthink paths use the same location syntax as the scripting dictionary:
 
 | Command | Description |
 |---|---|
-| `dt create:group /path --db X` | Create a hierarchy of groups |
-| `dt create:record '{"name":"X"}' --db X --at /Y` | Create a new record |
+| `dt create:group /path --db X` | Create group hierarchies |
+| `dt create:record '{"name":"X"}' --db X --at /Y` | Create a record from a property dictionary |
 
 ### Lookup
 
@@ -149,79 +129,26 @@ DEVONthink paths use the same location syntax as the scripting dictionary:
 
 | Command | Description |
 |---|---|
-| `dt ai:classify --uuid X [--db X]` | Classify a record |
+| `dt ai:classify --uuid X [--db X]` | Classify a record into suggested groups |
 | `dt ai:compare --uuid X` | Find similar records |
 
 ### Other
 
 | Command | Description |
 |---|---|
-| `dt index <path> --db X` | Index without copying |
+| `dt index <path> --db X` | Index a file without copying |
 
-Use `dt --help` or `dt <command> --help` for detailed usage.
+Run `dt --help` or `dt <command> --help` for full usage.
 
 ## Examples
 
-List only selected database properties:
+### Inspect database properties
 
 ```bash
 dt property:read --db "01. Personal" path root "incoming group"
 ```
 
-Create a group hierarchy:
-
-```bash
-dt create:group "/Projects/2026/Papers" --db "01. Personal"
-```
-
-Create a new record from a property dictionary:
-
-```bash
-dt create:record \
-  '{"name":"Scratch","type":"markdown","tags":["draft"]}' \
-  --db "01. Personal" --at "/Projects"
-```
-
-Lookup by filename:
-
-```bash
-dt lookup:file "paper.pdf" --db "01. Personal"
-```
-
-Lookup by tags:
-
-```bash
-dt lookup:tags reading llm --any --db "01. Personal"
-```
-
-Compare similar records:
-
-```bash
-dt ai:compare --uuid "<record-uuid>"
-```
-
-Classify a record:
-
-```bash
-dt ai:classify --uuid "<record-uuid>" --db "01. Personal"
-```
-
-### Group Operations (Command Sequences)
-
-Rename a group:
-
-```bash
-dt property:set --db "01. Personal" --at "/Projects/OldName" name=NewName
-```
-
-Delete a group:
-
-```bash
-dt get --db "01. Personal" --at "/Projects/Stale"
-dt delete --uuid "<group-uuid>"
-```
-
-Full folder import workflow:
+### Create a group hierarchy and import files
 
 ```bash
 dt create:group "/Projects/2026/Papers" --db "01. Personal"
@@ -229,59 +156,68 @@ dt add ~/Downloads/papers/ --db "01. Personal" --at "/Projects/2026/Papers"
 dt groups --db "01. Personal" /Projects/2026/Papers
 ```
 
+### Create a record from a property dictionary
+
+```bash
+dt create:record \
+  '{"name":"Scratch","type":"markdown","tags":["draft"]}' \
+  --db "01. Personal" --at "/Projects"
+```
+
+### Find records by tag
+
+```bash
+dt lookup:tags reading llm --any --db "01. Personal"
+```
+
+### Rename a group
+
+```bash
+dt property:set --db "01. Personal" --at "/Projects/OldName" name=NewName
+```
+
+### Delete a group
+
+```bash
+dt get --db "01. Personal" --at "/Projects/Stale"
+dt delete --uuid "<group-uuid>"
+```
+
+### Classify and compare with DEVONthink AI
+
+```bash
+dt ai:classify --uuid "<record-uuid>" --db "01. Personal"
+dt ai:compare --uuid "<record-uuid>"
+```
+
 ## Philosophy
 
-This package intentionally does not add:
-
-- recipe systems
-- automatic dedupe policies
-- import-and-trash workflows
-- folder ranking or recommendation logic
-- synthetic Inbox subsystems
-
-If DEVONthink provides a scripting command or property, `devonthink-cli` tries to expose it directly. If DEVONthink does not provide a higher-level behavior, this package does not invent one.
+`devonthink-cli` exposes what DEVONthink provides. It does not add recipe systems, dedupe policies, import-and-trash workflows, folder ranking, or synthetic Inbox subsystems. If DEVONthink does not offer a behavior natively, this package does not invent one.
 
 ## Development
 
-Refresh the checked-in schema from the local DEVONthink scripting dictionary:
+```bash
+pnpm install
+pnpm check          # TypeScript + doc validation
+pnpm test           # 26 spec tests (fake harness)
+pnpm test:smoke     # 17 live tests (requires DEVONthink + dt-cli-smoke database)
+pnpm build
+pnpm pack:check     # Package integrity
+```
+
+Refresh the schema from the local DEVONthink scripting dictionary:
 
 ```bash
 pnpm schema:refresh
 ```
 
-Run validation:
-
-```bash
-pnpm check
-pnpm test
-pnpm build
-pnpm pack:check
-```
-
-Run live smoke tests (requires DEVONthink open + `dt-cli-smoke` database):
-
-```bash
-pnpm test:smoke
-```
-
 ## Publishing
-
-Verify the package before release:
 
 ```bash
 pnpm release:check
-pnpm publish:dry-run
+npm publish --access public
 ```
 
-Publish publicly:
+## License
 
-```bash
-npm login
-pnpm publish:public
-```
-
-Current npm package name target:
-
-```text
-devonthink-cli
-```
+MIT
