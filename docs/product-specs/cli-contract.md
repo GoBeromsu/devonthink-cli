@@ -74,9 +74,7 @@ dt property:set --db "01. Personal" --at "/Projects/OldName" name=NewName
 ### Delete a group
 
 ```bash
-# Get the group UUID first, then delete
-dt get --db "01. Personal" --at "/Projects/Stale"
-dt delete --uuid "<group-uuid>"
+dt delete --db "01. Personal" --at "/Projects/Stale"
 ```
 
 ### Full folder import workflow

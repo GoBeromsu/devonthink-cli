@@ -200,4 +200,79 @@ describe("organization workflows executable spec", () => {
     ], remaining.port);
     expect(removedReplica.code).not.toBe(0);
   });
+
+  it("moves a record by path instead of UUID", async () => {
+    const moved = await runCli([
+      "move",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects/Existing.pdf",
+      "--to-db",
+      "01. Personal",
+      "--to",
+      "/Projects/Archive"
+    ]);
+    expect(moved.code).toBe(0);
+    expect(parseJsonOutput(moved.stdout)).toEqual(
+      expect.objectContaining({
+        name: "Existing.pdf",
+        location: "/Projects/Archive"
+      })
+    );
+  });
+
+  it("deletes a record by path instead of UUID", async () => {
+    const deleted = await runCli([
+      "delete",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects/Existing.pdf"
+    ]);
+    expect(deleted.code).toBe(0);
+    expect(parseJsonOutput(deleted.stdout)).toBe(true);
+  });
+
+  it("duplicates a record by path instead of UUID", async () => {
+    const duplicated = await runCli([
+      "duplicate",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects/Existing.pdf",
+      "--to-db",
+      "01. Personal",
+      "--to",
+      "/Projects/Archive"
+    ]);
+    expect(duplicated.code).toBe(0);
+    expect(parseJsonOutput(duplicated.stdout)).toEqual(
+      expect.objectContaining({
+        name: "Existing.pdf",
+        location: "/Projects/Archive"
+      })
+    );
+  });
+
+  it("replicates a record by path instead of UUID", async () => {
+    const replicated = await runCli([
+      "replicate",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects/Existing.pdf",
+      "--to-db",
+      "01. Personal",
+      "--to",
+      "/Projects/Archive"
+    ]);
+    expect(replicated.code).toBe(0);
+    expect(parseJsonOutput(replicated.stdout)).toEqual(
+      expect.objectContaining({
+        name: "Existing.pdf",
+        location: "/Projects/Archive"
+      })
+    );
+  });
 });

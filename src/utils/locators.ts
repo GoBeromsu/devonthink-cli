@@ -88,6 +88,54 @@ export function buildRecordRef(
   };
 }
 
+export function buildRecordRefFromUuidOrPath(
+  parsed: ParsedArgs,
+  options: {
+    uuidOption?: string;
+    dbOption?: string;
+    atOption?: string;
+    required?: boolean;
+    label?: string;
+  } = {}
+): RecordReference | undefined {
+  const uuidOpt = options.uuidOption ?? "uuid";
+  const dbOpt = options.dbOption ?? "db";
+  const atOpt = options.atOption ?? "at";
+  const label = options.label ?? "command";
+
+  const uuid = getOption(parsed, uuidOpt);
+  const db = getOption(parsed, dbOpt);
+  const at = getOption(parsed, atOpt);
+
+  if (uuid && (db || at)) {
+    throw new ValidationError(
+      `${label} accepts either --${uuidOpt} or --${dbOpt} with --${atOpt}, not both.`
+    );
+  }
+
+  if (uuid) {
+    return { $type: "record", locator: { uuid } };
+  }
+
+  if (db && at) {
+    return { $type: "record", locator: { database: { identifier: db }, at } };
+  }
+
+  if (db || at) {
+    throw new ValidationError(
+      `Record path lookup requires both --${dbOpt} and --${atOpt}.`
+    );
+  }
+
+  if (options.required) {
+    throw new ValidationError(
+      `${label} requires --${uuidOpt} or --${dbOpt} with --${atOpt}.`
+    );
+  }
+
+  return undefined;
+}
+
 export function databaseSelectorFromNameOrUuid(
   parsed: ParsedArgs,
   label = "database"

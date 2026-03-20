@@ -46,6 +46,40 @@ describe("validation guard executable spec", () => {
     );
   });
 
+  it("rejects mixed record locators for move, delete, duplicate, and replicate", async () => {
+    const moved = await runCli([
+      "move",
+      "--uuid",
+      "record-existing-1",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects/Existing.pdf",
+      "--to-db",
+      "01. Personal",
+      "--to",
+      "/Projects/Archive"
+    ]);
+    expect(moved.code).toBe(2);
+    expect(moved.stderr).toContain(
+      "move accepts either --uuid or --db with --at, not both."
+    );
+
+    const deleted = await runCli([
+      "delete",
+      "--uuid",
+      "record-existing-1",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects/Existing.pdf"
+    ]);
+    expect(deleted.code).toBe(2);
+    expect(deleted.stderr).toContain(
+      "delete accepts either --uuid or --db with --at, not both."
+    );
+  });
+
   it("rejects incomplete source or destination locator pairs", async () => {
     const move = await runCli([
       "move",
