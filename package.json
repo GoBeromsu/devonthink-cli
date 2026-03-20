@@ -1,6 +1,6 @@
 {
   "name": "devonthink-cli",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Pure CLI wrapper for the DEVONthink scripting dictionary.",
   "type": "module",
   "bin": {
@@ -39,6 +39,7 @@
     "release:check": "pnpm check && pnpm test && pnpm pack:check",
     "schema:refresh": "node ./scripts/refresh-schema.mjs",
     "test": "vitest run",
+    "test:smoke": "vitest run --config vitest.config.smoke.ts",
     "test:watch": "vitest"
   },
   "devDependencies": {

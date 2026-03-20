@@ -509,7 +509,9 @@ export class FakeDevonthinkPort implements DevonthinkPort {
       record.location = destination.dtPath;
       record.dtPath = joinLocation(destination.dtPath, record.name);
     });
-    return targets.map((record) => this.recordValue(record));
+    const results = targets.map((record) => this.recordValue(record));
+    // DEVONthink returns a single object for single-record input, array for multiple
+    return results.length === 1 ? results[0] as JsonValue : results;
   }
 
   private deleteRecords(input: DevonthinkCommandInput): JsonValue {
@@ -537,7 +539,7 @@ export class FakeDevonthinkPort implements DevonthinkPort {
   private duplicateRecords(input: DevonthinkCommandInput): JsonValue {
     const records = this.resolveRecordInputs(input.parameters?.record);
     const destination = this.resolveGroupReference(input.parameters?.to as PropertyValue);
-    return records.map((record) =>
+    const results = records.map((record) =>
       this.recordValue(
         this.createRecord(destination.databaseId, destination.dtPath, {
           uuid: input.commandName === "replicate" ? record.uuid : undefined,
@@ -551,6 +553,8 @@ export class FakeDevonthinkPort implements DevonthinkPort {
         })
       )
     );
+    // DEVONthink returns a single object for single-record input, array for multiple
+    return results.length === 1 ? results[0] as JsonValue : results;
   }
 
   private compareRecords(input: DevonthinkCommandInput): JsonValue {

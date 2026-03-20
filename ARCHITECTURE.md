@@ -72,4 +72,4 @@ Locators are simplified:
   - locator parsing tests
   - JXA adapter tests
 - Live:
-  - DEVONthink smoke checks on macOS with DEVONthink 4.x
+  - `test/smoke/` end-to-end tests against real DEVONthink (`pnpm test:smoke`)

@@ -206,6 +206,29 @@ Classify a record:
 dt ai:classify --uuid "<record-uuid>" --db "01. Personal"
 ```
 
+### Group Operations (Command Sequences)
+
+Rename a group:
+
+```bash
+dt property:set --db "01. Personal" --at "/Projects/OldName" name=NewName
+```
+
+Delete a group:
+
+```bash
+dt get --db "01. Personal" --at "/Projects/Stale"
+dt delete --uuid "<group-uuid>"
+```
+
+Full folder import workflow:
+
+```bash
+dt create:group "/Projects/2026/Papers" --db "01. Personal"
+dt add ~/Downloads/papers/ --db "01. Personal" --at "/Projects/2026/Papers"
+dt groups --db "01. Personal" /Projects/2026/Papers
+```
+
 ## Philosophy
 
 This package intentionally does not add:
@@ -233,6 +256,12 @@ pnpm check
 pnpm test
 pnpm build
 pnpm pack:check
+```
+
+Run live smoke tests (requires DEVONthink open + `dt-cli-smoke` database):
+
+```bash
+pnpm test:smoke
 ```
 
 ## Publishing

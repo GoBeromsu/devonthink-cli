@@ -60,3 +60,34 @@
 - folder-summary product layers
 
 If a behavior is useful but non-native, document it as a command sequence.
+
+## Command Sequences
+
+Group operations that DEVONthink supports natively but that use the generic property/delete commands:
+
+### Rename a group
+
+```bash
+dt property:set --db "01. Personal" --at "/Projects/OldName" name=NewName
+```
+
+### Delete a group
+
+```bash
+# Get the group UUID first, then delete
+dt get --db "01. Personal" --at "/Projects/Stale"
+dt delete --uuid "<group-uuid>"
+```
+
+### Full folder import workflow
+
+```bash
+# 1. Create the destination group hierarchy
+dt create:group "/Projects/2026/Papers" --db "01. Personal"
+
+# 2. Import files into the group
+dt add ~/Downloads/papers/ --db "01. Personal" --at "/Projects/2026/Papers"
+
+# 3. Verify contents
+dt groups --db "01. Personal" /Projects/2026/Papers
+```

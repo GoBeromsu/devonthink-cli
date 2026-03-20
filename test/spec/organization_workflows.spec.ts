@@ -76,12 +76,12 @@ describe("organization workflows executable spec", () => {
       "/Projects/Archive"
     ], indexedLookup.port);
     expect(moved.code).toBe(0);
-    expect(parseJsonOutput(moved.stdout)).toEqual([
+    expect(parseJsonOutput(moved.stdout)).toEqual(
       expect.objectContaining({
         name: "Existing.pdf",
         location: "/Projects/Archive"
       })
-    ]);
+    );
 
     const fetched = await runCli([
       "get",
@@ -124,12 +124,12 @@ describe("organization workflows executable spec", () => {
       "/Projects/Archive"
     ]);
     expect(replicated.code).toBe(0);
-    expect(parseJsonOutput(replicated.stdout)).toEqual([
+    expect(parseJsonOutput(replicated.stdout)).toEqual(
       expect.objectContaining({
         name: "Existing.pdf",
         location: "/Projects/Archive"
       })
-    ]);
+    );
 
     const moved = await runCli([
       "move",
@@ -145,12 +145,12 @@ describe("organization workflows executable spec", () => {
       "/Projects/Inbox"
     ], replicated.port);
     expect(moved.code).toBe(0);
-    expect(parseJsonOutput(moved.stdout)).toEqual([
+    expect(parseJsonOutput(moved.stdout)).toEqual(
       expect.objectContaining({
         name: "Existing.pdf",
         location: "/Projects/Inbox"
       })
-    ]);
+    );
 
     const original = await runCli([
       "get",

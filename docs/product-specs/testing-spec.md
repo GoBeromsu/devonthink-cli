@@ -28,6 +28,15 @@ Files outside `test/spec/` support the contract suite:
 - locator parsing
 - JXA adapter behavior
 
+## Live Smoke Tests
+
+End-to-end tests under `test/smoke/` exercise the real CLI binary against a live DEVONthink instance:
+
+- `smoke.test.ts` — core workflow (databases, create:group, groups, add, get, property:set/read, search, move, delete)
+- `smoke-extended.test.ts` — extended commands (create:record, lookup:file, lookup:tags, duplicate, replicate, ai:classify, ai:compare)
+
+Smoke tests are opt-in (`pnpm test:smoke`) and require DEVONthink 4.x + `dt-cli-smoke` database.
+
 ## Rule
 
 If public CLI behavior changes, update:
@@ -35,3 +44,5 @@ If public CLI behavior changes, update:
 1. `test/spec/`
 2. the relevant file in `docs/product-specs/`
 3. `README.md` if end-user usage changed
+
+If JXA runtime or adapter code changes, also verify with `pnpm test:smoke`.
