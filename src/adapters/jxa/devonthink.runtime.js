@@ -350,19 +350,32 @@ function serializeCommandResult(value, schemaObjects) {
 
   if (Array.isArray(value)) {
     return value.map(function (entry) {
-      return serializeCommandResult(entry, schemaObjects);
+      return serializeCommandListItem(entry, schemaObjects);
     });
   }
 
   if (isJxaList(value)) {
     return toArray(value).map(function (entry) {
-      return serializeCommandResult(entry, schemaObjects);
+      return serializeCommandListItem(entry, schemaObjects);
     });
   }
 
   var kind = detectObjectKind(value);
   if (kind) {
     return serializeCommandEntity(value, kind, schemaObjects);
+  }
+
+  return serializeNestedValue(value, schemaObjects);
+}
+
+function serializeCommandListItem(value, schemaObjects) {
+  if (value === null || value === undefined) {
+    return null;
+  }
+
+  var kind = detectObjectKind(value);
+  if (kind) {
+    return serializeReference(value, kind, schemaObjects);
   }
 
   return serializeNestedValue(value, schemaObjects);
@@ -434,6 +447,16 @@ function serializeNestedValue(value, schemaObjects) {
 }
 
 function serializeReference(entity, kind, schemaObjects) {
+  // Try batch property read first for performance
+  var bag = safeValue(function () {
+    return typeof entity.properties === "function" ? entity.properties() : null;
+  }, null);
+
+  if (bag && typeof bag === "object") {
+    return serializeReferenceFromBag(bag, kind);
+  }
+
+  // Fallback to individual property access
   switch (kind) {
     case "database":
       return compactObject({
@@ -489,6 +512,28 @@ function serializeReference(entity, kind, schemaObjects) {
           return entity.name();
         }, null)
       });
+  }
+}
+
+function serializeReferenceFromBag(bag, kind) {
+  switch (kind) {
+    case "database":
+      return compactObject({
+        name: bag.name || null,
+        uuid: bag.uuid || null,
+        path: bag.path || null
+      });
+    case "group":
+    case "record":
+      return compactObject({
+        name: bag.name || null,
+        uuid: bag.uuid || null,
+        location: bag.location || null,
+        path: bag.path || null,
+        "record type": bag.recordType || null
+      });
+    default:
+      return compactObject({ name: bag.name || null });
   }
 }
 
