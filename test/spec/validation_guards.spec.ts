@@ -78,6 +78,58 @@ describe("validation guard executable spec", () => {
     expect(deleted.stderr).toContain(
       "delete accepts either --uuid or --db with --at, not both."
     );
+
+    const duplicated = await runCli([
+      "duplicate",
+      "--uuid",
+      "record-existing-1",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects/Existing.pdf",
+      "--to-db",
+      "01. Personal",
+      "--to",
+      "/Projects/Archive"
+    ]);
+    expect(duplicated.code).toBe(2);
+    expect(duplicated.stderr).toContain(
+      "duplicate accepts either --uuid or --db with --at, not both."
+    );
+
+    const replicated = await runCli([
+      "replicate",
+      "--uuid",
+      "record-existing-1",
+      "--db",
+      "01. Personal",
+      "--at",
+      "/Projects/Existing.pdf",
+      "--to-db",
+      "01. Personal",
+      "--to",
+      "/Projects/Archive"
+    ]);
+    expect(replicated.code).toBe(2);
+    expect(replicated.stderr).toContain(
+      "replicate accepts either --uuid or --db with --at, not both."
+    );
+  });
+
+  it("rejects partial record path locator (--at without --db)", async () => {
+    const moved = await runCli([
+      "move",
+      "--at",
+      "/Projects/Existing.pdf",
+      "--to-db",
+      "01. Personal",
+      "--to",
+      "/Projects/Archive"
+    ]);
+    expect(moved.code).toBe(2);
+    expect(moved.stderr).toContain(
+      "Record path lookup requires both --db and --at."
+    );
   });
 
   it("rejects incomplete source or destination locator pairs", async () => {
